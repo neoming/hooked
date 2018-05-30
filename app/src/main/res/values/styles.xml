@@ -8,7 +8,6 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:listDivider">@drawable/list_divider</item>
         <item name="android:windowFullscreen">true</item>
-        <item name="android:screenOrientation">portrait</item>
     </style>
 
 </resources>
