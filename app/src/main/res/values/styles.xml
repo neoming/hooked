@@ -10,4 +10,10 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
+    <style name="AppFadeTheme" parent="AppTheme">
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+    </style>
+
+
 </resources>
