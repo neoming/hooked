@@ -6,14 +6,11 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:listDivider">@drawable/list_divider</item>
         <item name="android:windowFullscreen">true</item>
     </style>
 
-    <style name="AppFadeTheme" parent="AppTheme">
-        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
-        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+    <style name="HomePageTheme" parent="AppTheme">
+        <item name="android:listDivider">@drawable/list_divider</item>
     </style>
-
 
 </resources>

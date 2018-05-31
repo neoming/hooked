@@ -38,7 +38,10 @@ public class MainActivity extends AppCompatActivity {
         Glide.with(this).load(R.drawable.avatar).into((ImageView) findViewById(R.id.avatar));
         initPage();
         findViewById(R.id.icon_notification).setOnClickListener((v) -> startActivity(new Intent(this, NotificationActivity.class)));
-        findViewById(R.id.icon_search).setOnClickListener((v) -> startActivity(new Intent(this, SearchActivity.class)));
+        findViewById(R.id.icon_search).setOnClickListener((v) -> {
+            startActivity(new Intent(this, SearchActivity.class));
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        });
         findViewById(R.id.avatar).setOnClickListener((v) -> startActivity(new Intent(this, ProfileActivity.class)));
     }
 

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginBottom="25dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/avatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/avatar_1"
+            android:layout_margin="15dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/avatar"
+            android:orientation="vertical"
+            android:layout_centerVertical="true">
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@android:color/primary_text_light"
+                android:text="Lisa Yang"
+                android:layout_marginBottom="4dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@android:color/secondary_text_light"
+                android:text="New York City, USA" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/photo"
+        android:layout_width="match_parent"
+        android:layout_height="184dp"
+        tools:src="@drawable/photo_1"
+        android:scaleType="centerCrop"/>
+
+    <RelativeLayout
+        android:layout_marginTop="25dp"
+        android:layout_marginStart="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="17dp">
+        <ImageView
+            android:id="@+id/star"
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:src="@drawable/ic_star_border_black_24dp"
+            android:tint="#AAAAAA"/>
+        <TextView
+            android:gravity="center"
+            android:id="@+id/num1"
+            android:layout_toEndOf="@id/star"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="14sp"
+            android:text="654"
+            android:layout_marginStart="10dp"
+            android:textColor="@android:color/secondary_text_light"/>
+        <ImageView
+            android:id="@+id/comment"
+            android:layout_toEndOf="@id/num1"
+            android:layout_marginStart="25dp"
+            android:layout_centerVertical="true"
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:src="@drawable/ic_message_black_24dp"
+            android:tint="#AAAAAA"/>
+        <TextView
+            android:id="@+id/num2"
+            android:layout_toEndOf="@id/comment"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="14sp"
+            android:text="423"
+            android:layout_marginStart="10dp"
+            android:textColor="@android:color/secondary_text_light"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_alignParentEnd="true"
+            android:text="3 minutes ago"
+            android:textSize="12sp"
+            android:layout_marginEnd="15dp"/>
+    </RelativeLayout>
+
+
+</LinearLayout>

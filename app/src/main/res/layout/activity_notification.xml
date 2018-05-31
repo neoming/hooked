@@ -2,11 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="#EEEEEE">
+        android:background="@color/colorPrimary">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -17,13 +19,13 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:src="@drawable/ic_ali_back"
-                android:tint="@android:color/secondary_text_light"/>
+                android:tint="@android:color/primary_text_dark"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="NOTIFICATIONS"
                 android:textSize="14sp"
-                android:textColor="@android:color/primary_text_light"
+                android:textColor="@android:color/primary_text_dark"
                 android:layout_centerInParent="true"/>
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
