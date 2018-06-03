@@ -10,23 +10,26 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:theme="@style/HomePageTheme"
             android:name=".MainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/HomePageTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".NotificationActivity"
+            android:name=".views.NotificationActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SearchActivity"
+            android:name=".views.SearchActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ProfileActivity"
+            android:name=".views.ProfileActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".views.ContentActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/HomePageTheme"/>
     </application>
 
 </manifest>

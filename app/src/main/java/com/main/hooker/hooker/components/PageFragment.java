@@ -1,10 +1,13 @@
-package com.main.hooker.hooker;
+package com.main.hooker.hooker.components;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -15,6 +18,11 @@ import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.main.hooker.hooker.views.ContentActivity;
+import com.main.hooker.hooker.model.DemoDataServer;
+import com.main.hooker.hooker.R;
+import com.main.hooker.hooker.model.Request;
+import com.main.hooker.hooker.model.RequestCallBack;
 import com.main.hooker.hooker.entity.Book;
 import com.main.hooker.hooker.kits.CustomLoadMore;
 
@@ -51,6 +59,13 @@ public class PageFragment extends Fragment {
         adapter.setOnLoadMoreListener(this::loadMore, recyclerView);
         adapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
         adapter.setLoadMoreView(new CustomLoadMore());
+        adapter.setOnItemClickListener((adapter, view1, position) -> {
+            Intent intent = new Intent(getActivity(), ContentActivity.class);
+            intent.putExtra("title", ((Book) adapter.getItem(position)).getTitle());
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    getActivity(), new Pair<>(view1, getString(R.string.transition_name_card)));
+            startActivity(intent, options.toBundle());
+        });
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));

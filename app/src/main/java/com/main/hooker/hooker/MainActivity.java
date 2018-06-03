@@ -8,11 +8,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.main.hooker.hooker.components.PageFragment;
+import com.main.hooker.hooker.views.NotificationActivity;
+import com.main.hooker.hooker.views.ProfileActivity;
+import com.main.hooker.hooker.views.SearchActivity;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;

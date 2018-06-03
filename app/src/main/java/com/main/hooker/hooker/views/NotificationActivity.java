@@ -1,7 +1,9 @@
-package com.main.hooker.hooker;
+package com.main.hooker.hooker.views;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.main.hooker.hooker.R;
 
 public class NotificationActivity extends AppCompatActivity {
 

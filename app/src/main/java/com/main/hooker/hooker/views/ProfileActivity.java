@@ -1,4 +1,4 @@
-package com.main.hooker.hooker;
+package com.main.hooker.hooker.views;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.main.hooker.hooker.R;
 import com.main.hooker.hooker.entity.Message;
 
 import java.util.ArrayList;

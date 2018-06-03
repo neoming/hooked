@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".components.PageFragment">
+    android:id="@+id/mainLayout"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.v7.widget.RecyclerView
+        android:clickable="true"
         android:id="@+id/recycler"
-        android:layout_marginStart="4dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:listitem="@layout/item_bubble">
 
     </android.support.v7.widget.RecyclerView>
 </FrameLayout>

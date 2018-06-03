@@ -1,4 +1,4 @@
-package com.main.hooker.hooker;
+package com.main.hooker.hooker.model;
 
 import com.main.hooker.hooker.entity.Book;
 
