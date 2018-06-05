@@ -36,6 +36,7 @@ public class ChatBookFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         bubbles.add(new Bubble());
+        view.findViewById(R.id.title).setOnClickListener((v) -> getActivity().getSupportFragmentManager().popBackStack());
         View layout = view.findViewById(R.id.mainLayout);
         RecyclerView recyclerView = view.findViewById(R.id.recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -69,5 +70,6 @@ public class ChatBookFragment extends Fragment {
             }
         }
     }
+
 }
 

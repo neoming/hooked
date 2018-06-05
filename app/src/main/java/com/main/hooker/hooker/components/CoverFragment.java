@@ -14,6 +14,7 @@ import com.main.hooker.hooker.R;
 
 public class CoverFragment extends Fragment {
     private String title;
+    private ChatBookFragment book = new ChatBookFragment();
     public static CoverFragment newInstance(String title) {
         CoverFragment fragment = new CoverFragment();
         fragment.title = title;
@@ -29,12 +30,15 @@ public class CoverFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         TextView tv = view.findViewById(R.id.title);
         tv.setText(title);
-        view.setOnClickListener(v -> getActivity()
-                .getSupportFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_bottom, R.anim.slide_in_top, R.anim.slide_out_top)
-                .add(R.id.fragment, new ChatBookFragment())
-                .addToBackStack(null)
-                .commit());
+        view.setOnClickListener(v ->
+        {
+            getActivity()
+                    .getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_bottom, R.anim.slide_in_top, R.anim.slide_out_top)
+                    .add(R.id.fragment, book)
+                    .addToBackStack(null)
+                    .commit();
+        });
     }
 }
