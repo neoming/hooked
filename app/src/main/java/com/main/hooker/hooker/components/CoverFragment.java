@@ -29,7 +29,12 @@ public class CoverFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         TextView tv = view.findViewById(R.id.title);
         tv.setText(title);
-        view.findViewById(R.id.icon_next).setOnClickListener(v -> getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new ChatBookFragment()).commit());
-
+        view.setOnClickListener(v -> getActivity()
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_bottom, R.anim.slide_in_top, R.anim.slide_out_top)
+                .add(R.id.fragment, new ChatBookFragment())
+                .addToBackStack(null)
+                .commit());
     }
 }

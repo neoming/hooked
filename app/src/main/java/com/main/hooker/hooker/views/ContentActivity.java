@@ -13,7 +13,9 @@ public class ContentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_content);
         String title = getIntent().getStringExtra("title");
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, CoverFragment.newInstance(title)).commit();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment, CoverFragment.newInstance(title))
+                .commit();
         getSupportFragmentManager().executePendingTransactions();
     }
 }

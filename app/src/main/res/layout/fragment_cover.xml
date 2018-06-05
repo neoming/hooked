@@ -15,14 +15,4 @@
             android:textSize="40sp"
             android:textColor="@android:color/white"/>
     </RelativeLayout>
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/icon_next"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:src="@drawable/ic_ali_up"
-        android:rotation="180"
-        android:tint="@color/colorAccent"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"/>
 </RelativeLayout>
