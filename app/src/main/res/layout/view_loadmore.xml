@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_40">
 
@@ -13,11 +12,11 @@
 
         <ProgressBar
             android:id="@+id/loading_progress"
+            style="?android:attr/progressBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="?android:attr/progressBarStyleSmall"
             android:layout_marginEnd="4dp"
-            android:indeterminateDrawable="@drawable/footer_loading"/>
+            android:indeterminateDrawable="@drawable/footer_loading" />
 
     </LinearLayout>
 
@@ -33,8 +32,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textColor="#0dddb8"
-            android:text="failed"/>
+            android:text="failed"
+            android:textColor="#0dddb8" />
 
     </FrameLayout>
 
@@ -49,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/brvah_load_end"
-            android:textColor="@android:color/darker_gray"/>
+            android:textColor="@android:color/darker_gray" />
     </FrameLayout>
 
 </FrameLayout>
