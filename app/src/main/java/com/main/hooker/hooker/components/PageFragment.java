@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.main.hooker.hooker.model.DataServer;
 import com.main.hooker.hooker.views.ContentActivity;
 import com.main.hooker.hooker.R;
@@ -26,6 +27,8 @@ import com.main.hooker.hooker.model.RequestCallBack;
 import com.main.hooker.hooker.entity.Book;
 import com.main.hooker.hooker.kits.CustomLoadMore;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 
@@ -54,8 +57,15 @@ public class PageFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView recyclerView = view.findViewById(R.id.recycler);
         adapter = new CoverAdapter(R.layout.item_book);
-        adapter.setOnLoadMoreListener(this::loadMore, recyclerView);
-        adapter.setNewData(DataServer.genDate(0)); // 参数还没什么用
+        //adapter.setOnLoadMoreListener(this::loadMore, recyclerView);
+        new Thread(() -> {
+            try {
+                Book book = new ObjectMapper().readValue(new URL("http://ds.trealent.com/api/book/all"), Book.class);
+                getActivity().runOnUiThread(() -> adapter.setNewData(book.getData()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
         adapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
         adapter.setLoadMoreView(new CustomLoadMore());
         adapter.setOnItemClickListener((adapter, view1, position) -> {
