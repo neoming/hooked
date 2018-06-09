@@ -18,8 +18,8 @@ import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.main.hooker.hooker.model.DataServer;
 import com.main.hooker.hooker.views.ContentActivity;
-import com.main.hooker.hooker.model.DemoDataServer;
 import com.main.hooker.hooker.R;
 import com.main.hooker.hooker.model.Request;
 import com.main.hooker.hooker.model.RequestCallBack;
@@ -30,7 +30,6 @@ import java.util.List;
 
 
 public class PageFragment extends Fragment {
-    private DemoDataServer server = new DemoDataServer();
     private CoverAdapter adapter;
 
     public static PageFragment newInstance() {
@@ -55,13 +54,13 @@ public class PageFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView recyclerView = view.findViewById(R.id.recycler);
         adapter = new CoverAdapter(R.layout.item_book);
-        adapter.setNewData(server.genData(10));
         adapter.setOnLoadMoreListener(this::loadMore, recyclerView);
+        adapter.setNewData(DataServer.genDate(0)); // 参数还没什么用
         adapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
         adapter.setLoadMoreView(new CustomLoadMore());
         adapter.setOnItemClickListener((adapter, view1, position) -> {
             Intent intent = new Intent(getActivity(), ContentActivity.class);
-            intent.putExtra("title", ((Book) adapter.getItem(position)).getTitle());
+            intent.putExtra("title", ((Book.DataBean) adapter.getItem(position)).getTitle());
             ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                     getActivity(), new Pair<>(view1, getString(R.string.transition_name_card)));
             startActivity(intent, options.toBundle());
@@ -75,7 +74,7 @@ public class PageFragment extends Fragment {
     private void loadMore() {
         new Request(new RequestCallBack() {
             @Override
-            public void success(List<Book> data) {
+            public void success(List<Book.DataBean> data) {
                 adapter.addData(data);
                 adapter.loadMoreComplete();
             }
@@ -85,20 +84,20 @@ public class PageFragment extends Fragment {
                 adapter.loadMoreFail();
                 Toast.makeText(getContext(), "Error", Toast.LENGTH_LONG).show();
             }
-        }, server).start();
+        }).start();
     }
 
 
-    private static class CoverAdapter extends BaseQuickAdapter<Book, BaseViewHolder> {
+    private static class CoverAdapter extends BaseQuickAdapter<Book.DataBean, BaseViewHolder> {
 
         CoverAdapter(int layoutResId) {
             super(layoutResId);
         }
 
         @Override
-        protected void convert(BaseViewHolder helper, Book item) {
+        protected void convert(BaseViewHolder helper, Book.DataBean item) {
             helper.setText(R.id.title, item.getTitle());
-            helper.itemView.getLayoutParams().height = item.getHeight();
+            helper.itemView.getLayoutParams().height = 600;
         }
     }
 }

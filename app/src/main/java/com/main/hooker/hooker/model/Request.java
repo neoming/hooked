@@ -6,24 +6,15 @@ import android.os.Looper;
 public class Request extends Thread {
     private RequestCallBack mCallBack;
     private Handler mHandler;
-    private DemoDataServer mServer;
 
-    public Request(RequestCallBack callBack, DemoDataServer server) {
+
+    public Request(RequestCallBack callBack) {
         mCallBack = callBack;
         mHandler = new Handler(Looper.getMainLooper());
-        mServer = server;
     }
 
     @Override
     public void run() {
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        mHandler.post(() -> mCallBack.success(mServer.genData(3)));
-
-
+        mHandler.post(() -> mCallBack.success(DataServer.genDate(3)));
     }
-
 }
