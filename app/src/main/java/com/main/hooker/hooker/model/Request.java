@@ -3,6 +3,10 @@ package com.main.hooker.hooker.model;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.main.hooker.hooker.entity.Book;
+
+import java.util.List;
+
 public class Request extends Thread {
     private RequestCallBack mCallBack;
     private Handler mHandler;
@@ -15,6 +19,12 @@ public class Request extends Thread {
 
     @Override
     public void run() {
-        mHandler.post(() -> mCallBack.success(DataServer.genDate(3)));
+        try {
+            Thread.sleep(1000);
+            List<Book.DataBean> data = DataServer.genDate(3);
+            mHandler.post(() -> mCallBack.success(data));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

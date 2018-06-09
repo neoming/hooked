@@ -57,7 +57,7 @@ public class PageFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView recyclerView = view.findViewById(R.id.recycler);
         adapter = new CoverAdapter(R.layout.item_book);
-        //adapter.setOnLoadMoreListener(this::loadMore, recyclerView);
+        adapter.setOnLoadMoreListener(this::loadMore, recyclerView);
         new Thread(() -> {
             try {
                 Book book = new ObjectMapper().readValue(new URL("http://ds.trealent.com/api/book/all"), Book.class);

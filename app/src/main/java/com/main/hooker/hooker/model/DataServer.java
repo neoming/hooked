@@ -14,14 +14,12 @@ public class DataServer {
     private static ObjectMapper mapper = new ObjectMapper();
 
     public static List<Book.DataBean> genDate(int num) {
-        final Book[] book = {null};
-        new Thread(() -> {
-            try {
-                book[0] = mapper.readValue(new URL("http://ds.trealent.com/api/book/all"), Book.class);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }).start();
-        return book[0].getData();
+        Book book = null;
+        try {
+            book = mapper.readValue(new URL("http://ds.trealent.com/api/book/all"), Book.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return book.getData();
     }
 }
