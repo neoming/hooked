@@ -8,10 +8,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.main.hooker.hooker.components.PageFragment;
+import com.main.hooker.hooker.utils.Tool;
 import com.main.hooker.hooker.views.NotificationActivity;
 import com.main.hooker.hooker.views.ProfileActivity;
 import com.main.hooker.hooker.views.SearchActivity;
@@ -29,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private final static int PAGE_NUM = 10;
+    private final static int PAGE_NUM = 5;
     private List<PageFragment> pages = new ArrayList<>();
     ViewPager pager;
 
@@ -45,11 +47,17 @@ public class MainActivity extends AppCompatActivity {
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         });
         findViewById(R.id.avatar).setOnClickListener((v) -> startActivity(new Intent(this, ProfileActivity.class)));
+        Log.i("test", MainApplication.getContext() == null? "null context" : "has context");
+        String test = MainApplication.getState().getMeta("test_meta");
+        Log.i("test", "Test 1: "+test);
+        MainApplication.getState().setMeta("test_meta", "haha!");
+        test = MainApplication.getState().getMeta("test_meta");
+        Log.i("test", "Test 2: "+test);
     }
 
     private void initPage() {
         for (int i = 0; i < PAGE_NUM; i++) {
-            pages.add(PageFragment.newInstance());
+            pages.add(PageFragment.newInstance(i));
         }
         pager = findViewById(R.id.viewPager);
         pager.setOffscreenPageLimit(3);
@@ -77,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public IPagerTitleView getTitleView(Context context, final int index) {
             SimplePagerTitleView simplePagerTitleView = new SimplePagerTitleView(context);
-            simplePagerTitleView.setText("ROMANCE");
+            simplePagerTitleView.setText(Tool.indexToType(index).toUpperCase());
             simplePagerTitleView.setNormalColor(Color.parseColor("#999999"));
             simplePagerTitleView.setSelectedColor(Color.WHITE);
             simplePagerTitleView.setOnClickListener(v -> pager.setCurrentItem(index));

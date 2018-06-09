@@ -18,26 +18,31 @@ import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.main.hooker.hooker.model.DataServer;
+import com.main.hooker.hooker.model.BookModel;
+import com.main.hooker.hooker.utils.Tool;
+import com.main.hooker.hooker.utils.http.ApiFailException;
 import com.main.hooker.hooker.views.ContentActivity;
 import com.main.hooker.hooker.R;
-import com.main.hooker.hooker.model.Request;
-import com.main.hooker.hooker.model.RequestCallBack;
 import com.main.hooker.hooker.entity.Book;
 import com.main.hooker.hooker.kits.CustomLoadMore;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.List;
+import java.util.ArrayList;
 
 
 public class PageFragment extends Fragment {
     private CoverAdapter adapter;
+    private int mType;
+    private int mPage = 1;
 
-    public static PageFragment newInstance() {
+
+    public static PageFragment newInstance(int index) {
         PageFragment fragment = new PageFragment();
+        fragment.setIndex(index);
         return fragment;
+    }
+
+
+    public void setIndex(int index){
+        mType = index;
     }
 
     @Override
@@ -58,19 +63,14 @@ public class PageFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.recycler);
         adapter = new CoverAdapter(R.layout.item_book);
         adapter.setOnLoadMoreListener(this::loadMore, recyclerView);
-        new Thread(() -> {
-            try {
-                Book book = new ObjectMapper().readValue(new URL("http://ds.trealent.com/api/book/all"), Book.class);
-                getActivity().runOnUiThread(() -> adapter.setNewData(book.getData()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        load();
         adapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
         adapter.setLoadMoreView(new CustomLoadMore());
         adapter.setOnItemClickListener((adapter, view1, position) -> {
             Intent intent = new Intent(getActivity(), ContentActivity.class);
-            intent.putExtra("title", ((Book.DataBean) adapter.getItem(position)).getTitle());
+            Book book = (Book) adapter.getItem(position);
+            intent.putExtra("title", book.title);
+            intent.putExtra("book_id", book.id);
             ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                     getActivity(), new Pair<>(view1, getString(R.string.transition_name_card)));
             startActivity(intent, options.toBundle());
@@ -80,33 +80,54 @@ public class PageFragment extends Fragment {
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
     }
 
+    private void load(){
+        load(false);
+    }
 
-    private void loadMore() {
-        new Request(new RequestCallBack() {
-            @Override
-            public void success(List<Book.DataBean> data) {
-                adapter.addData(data);
-                adapter.loadMoreComplete();
-            }
-
-            @Override
-            public void fail(Exception e) {
-                adapter.loadMoreFail();
-                Toast.makeText(getContext(), "Error", Toast.LENGTH_LONG).show();
+    private void load(boolean more){
+        if(more){
+            mPage += 1;
+        }
+        new Thread(() -> {
+            try {
+                ArrayList<Book> list = BookModel.getList(Tool.indexToType(mType), mPage);
+                getActivity().runOnUiThread(() -> {
+                    if(more){
+                        if(list!=null && list.size()>0){
+                            adapter.addData(list);
+                            adapter.loadMoreComplete();
+                        }else{
+                            Toast.makeText(getContext(), "There is no more", Toast.LENGTH_LONG).show();
+                            adapter.loadMoreEnd(true);
+                        }
+                    }else{
+                        adapter.setNewData(list);
+                    }
+                });
+            } catch (ApiFailException e) {
+                if(more){
+                    adapter.loadMoreFail();
+                }
+                Toast.makeText(getContext(), "Error:" + e.getApiResult().msg, Toast.LENGTH_LONG).show();
             }
         }).start();
     }
 
 
-    private static class CoverAdapter extends BaseQuickAdapter<Book.DataBean, BaseViewHolder> {
+    private void loadMore() {
+        load(true);
+    }
+
+
+    private static class CoverAdapter extends BaseQuickAdapter<Book, BaseViewHolder> {
 
         CoverAdapter(int layoutResId) {
             super(layoutResId);
         }
 
         @Override
-        protected void convert(BaseViewHolder helper, Book.DataBean item) {
-            helper.setText(R.id.title, item.getTitle());
+        protected void convert(BaseViewHolder helper, Book item) {
+            helper.setText(R.id.title, item.title);
             helper.itemView.getLayoutParams().height = 600;
         }
     }
