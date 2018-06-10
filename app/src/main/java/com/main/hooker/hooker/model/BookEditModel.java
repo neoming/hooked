@@ -31,17 +31,19 @@ public class BookEditModel {
     public static FormBody.Builder getAuthBodyBuilder() {
         State state = MainApplication.getState();
         return new FormBody.Builder()
-                .add("uid", String.valueOf(state.userGetUid()))
-                .add("api_token", state.userGetApiToken());
+                .add("uid", Integer.toString(8))
+                .add("api_token", "9aSAiTMbc8SfMV2NgyAA2V5l");
     }
 
     //人物的相关操作 获取列表，增加人物，编辑已有的人物，删除人物
     public static ArrayList<Character> getCharacterList(int book_id) throws ApiFailException {
-        ApiResult result = Http.get("book/character/characters" + String.valueOf(book_id));
+        RequestBody body = getAuthBodyBuilder()
+                .add("book_id",Integer.toString(book_id))
+                .build();
+        ApiResult result = Http.post("book/character/characters",body);
         Gson gson = Gsoner.get();
         Type characterListType = new TypeToken<ArrayList<Character>>() {
         }.getType();
-        Log.d("get characterList", "getCharacterList() returned: " + gson.fromJson(result.data, characterListType));
         return gson.fromJson(result.data, characterListType);
     }
 
@@ -56,20 +58,19 @@ public class BookEditModel {
         return gson.fromJson(result.data, Character.class);
     }
 
-    public static Character editCharacter(int book_id,String name,String avatar)throws ApiFailException{
+    public static Character editCharacter(int character_id,String name,String avatar)throws ApiFailException{
         RequestBody body = getAuthBodyBuilder()
-                .add("book_id",Integer.toString(book_id))
                 .add("name",name)
                 .add("avatar",avatar)
+                .add("character_id",Integer.toString(character_id))
                 .build();
         ApiResult result = Http.post("book/character/edit", body);
         Gson gson = Gsoner.get();
         return gson.fromJson(result.data, Character.class);
     }
 
-    public static void removeCharacter(int book_id,int character_id)throws ApiFailException{
+    public static void removeCharacter(int character_id)throws ApiFailException{
         RequestBody body = getAuthBodyBuilder()
-                .add("book_id",Integer.toString(book_id))
                 .add("character_id",Integer.toString(character_id))
                 .build();
         ApiResult result = Http.post("book/character/remove", body);
@@ -89,9 +90,9 @@ public class BookEditModel {
         return gson.fromJson(result.data,Bubble.class);
     }
 
-    public static Bubble bubbleEdit(int book_id,int type,int position,int character_id,String content)throws ApiFailException{
+    public static Bubble bubbleEdit(int type,int position,int character_id,String content,int item_id)throws ApiFailException{
         RequestBody body = getAuthBodyBuilder()
-                .add("book_id",Integer.toString(book_id))
+                .add("item_id",Integer.toString(item_id))
                 .add("character_id",Integer.toString(character_id))
                 .add("type",Integer.toString(type))
                 .add("position",Integer.toString(position))
