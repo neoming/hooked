@@ -1,10 +1,12 @@
 package com.main.hooker.hooker.components;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.transition.TransitionInflater;
 import android.transition.TransitionManager;
 import android.view.LayoutInflater;
@@ -15,6 +17,8 @@ import android.widget.TextView;
 
 import com.main.hooker.hooker.R;
 import com.main.hooker.hooker.entity.Book;
+import com.main.hooker.hooker.model.UserModel;
+import com.main.hooker.hooker.utils.http.ApiFailException;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -78,13 +82,29 @@ public class CoverFragment extends Fragment {
                     .addToBackStack(null)
                     .commit();
         });
-
+        checkIsFavored();
     }
 
+    private void setFavorIcon(boolean lit){
+        ImageView icon = getView().findViewById(R.id.icon_notification);
+        if(lit){
+            icon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(),R.color.litYellow)));
+        } else {
+            icon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(),R.color.white)));
+        }
+    }
 
-    public void hideAll() {
-        detail.setVisibility(View.GONE);
-        appbar.setVisibility(View.GONE);
+    private void checkIsFavored(){
+        new Thread(()->{
+            try {
+                boolean isFavored = UserModel.isFavored(book.id);
+                getActivity().runOnUiThread(()->{
+                    setFavorIcon(isFavored);
+                });
+            } catch (ApiFailException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
 }
