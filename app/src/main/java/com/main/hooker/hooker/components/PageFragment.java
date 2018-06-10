@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.support.transition.TransitionManager;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
@@ -14,6 +16,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +43,8 @@ public class PageFragment extends Fragment {
     private CoverAdapter adapter;
     private int mType;
     private int mPage = 1;
+    private View appbar;
+    private View detail;
 
     public static PageFragment newInstance(int index) {
         PageFragment fragment = new PageFragment();
@@ -53,8 +58,16 @@ public class PageFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        appbar = getActivity().findViewById(R.id.appbar);
         super.onCreate(savedInstanceState);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (detail != null)
+            detail.animate().alpha(1.0f).setDuration(300).start();
     }
 
     @Override
@@ -76,16 +89,23 @@ public class PageFragment extends Fragment {
             Intent intent = new Intent(getActivity(), ContentActivity.class);
             BookWrapper wrapper = (BookWrapper) adapter.getItem(position);
             Book book = wrapper.book;
-            intent.putExtra("book", book);
-            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    getActivity(),
-                    new Pair<>(view1.findViewById(R.id.cover), getString(R.string.transition_name_cover)));
-            startActivity(intent, options.toBundle());
+            detail = view1.findViewById(R.id.title_container);
+            detail.animate().alpha(0.0f).setDuration(300).start();
+            appbar.animate().alpha(0.0f).setDuration(300).start();
+
+            new Handler().postDelayed(() -> {
+                intent.putExtra("book", book);
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        getActivity(), view1.findViewById(R.id.cover), getString(R.string.transition_name_cover)
+                );
+                startActivity(intent, options.toBundle());
+            }, 300);
         });
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
     }
+
 
     private void load() {
         load(false);

@@ -23,6 +23,9 @@ public class CoverFragment extends Fragment {
 
     private ChatBookFragment chatBookFragment;
 
+    private View appbar;
+    private View detail;
+
     public static CoverFragment newInstance(Book book) {
         CoverFragment fragment = new CoverFragment();
         fragment.book = book;
@@ -41,7 +44,18 @@ public class CoverFragment extends Fragment {
         TextView tv = view.findViewById(R.id.title);
         Picasso.get().load(book.cover_img).into((ImageView) view.findViewById(R.id.cover));
         tv.setText(book.title);
+        TextView tvAuthor = view.findViewById(R.id.author);
+        tvAuthor.setText(book.author == null ? "unknown" : book.author.username);
+        TextView favoredCount = view.findViewById(R.id.loved);
+        favoredCount.setText(String.valueOf(book.favor_count));
+        TextView desc = view.findViewById(R.id.description);
+        desc.setText(book.desc);
         chatBookFragment = ChatBookFragment.newInstance(book);
+        detail = view.findViewById(R.id.detail);
+        appbar = view.findViewById(R.id.appbar);
+
+        detail.animate().alpha(1.0f).setStartDelay(500);
+        appbar.animate().alpha(1.0f).setStartDelay(500);
         view.setOnClickListener(v ->
         {
             getActivity()
