@@ -41,13 +41,11 @@ public class PageFragment extends Fragment {
     private int mType;
     private int mPage = 1;
 
-
     public static PageFragment newInstance(int index) {
         PageFragment fragment = new PageFragment();
         fragment.setIndex(index);
         return fragment;
     }
-
 
     public void setIndex(int index) {
         mType = index;
@@ -131,7 +129,6 @@ public class PageFragment extends Fragment {
     private void loadMore() {
         load(true);
     }
-
 
     private static class CoverAdapter extends BaseQuickAdapter<BookWrapper, BaseViewHolder> {
 

@@ -21,7 +21,9 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class ChatBookFragment extends Fragment {
+
     private List<Bubble> bubbles = new ArrayList<>();
     private Book book;
 
@@ -56,6 +58,7 @@ public class ChatBookFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
+
     private static class BubbleAdapter extends BaseQuickAdapter<Bubble, BaseViewHolder> {
         public BubbleAdapter(int layoutResId, @Nullable List<Bubble> data) {
             super(layoutResId, data);
@@ -63,14 +66,14 @@ public class ChatBookFragment extends Fragment {
 
         @Override
         protected void convert(BaseViewHolder helper, Bubble item) {
-            if (item.isLeft()) {
-                helper.setText(R.id.character, item.getCharacter());
-                helper.setText(R.id.content, item.getContent());
+            if (item.position == 0) {
+                helper.setText(R.id.character, item.character.name);
+                helper.setText(R.id.content, item.content);
                 helper.setGone(R.id.card, true);
                 helper.setGone(R.id.card2, false);
             } else {
-                helper.setText(R.id.character2, item.getCharacter());
-                helper.setText(R.id.content2, item.getContent());
+                helper.setText(R.id.character2, item.character.name);
+                helper.setText(R.id.content2, item.content);
                 helper.setGone(R.id.card2, true);
                 helper.setGone(R.id.card, false);
             }
@@ -78,4 +81,3 @@ public class ChatBookFragment extends Fragment {
     }
 
 }
-

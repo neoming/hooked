@@ -14,9 +14,10 @@ import com.main.hooker.hooker.R;
 import com.main.hooker.hooker.entity.Book;
 import com.squareup.picasso.Picasso;
 
-
 public class CoverFragment extends Fragment {
+
     private Book book;
+
     private ChatBookFragment chatBookFragment;
 
     public static CoverFragment newInstance(Book book) {
@@ -29,6 +30,7 @@ public class CoverFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_cover, container, false);
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -48,4 +50,5 @@ public class CoverFragment extends Fragment {
                     .commit();
         });
     }
+
 }

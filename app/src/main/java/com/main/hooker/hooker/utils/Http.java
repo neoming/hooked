@@ -56,7 +56,7 @@ public class Http {
         } catch (ApiFailException e) {
             throw e;
         } catch (Exception e) {
-            throw new ApiFailException(new ApiResult());
+            throw new ApiFailException();
         }
     }
 
