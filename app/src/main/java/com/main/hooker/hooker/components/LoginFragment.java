@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.main.hooker.hooker.MainActivity;
 import com.main.hooker.hooker.R;
 import com.main.hooker.hooker.model.UserModel;
 import com.main.hooker.hooker.utils.http.ApiFailException;
@@ -66,13 +67,18 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                             String password = ((TextInputEditText) loginDialog.findViewById(R.id.password)).getText().toString();
                             if (!name.trim().equals("")) {
                                 new Thread(() -> {
-                                    //  try {
+                                    try {
                                     Log.d("userinfo", "onClick: " + name + "pass:" + password);
-                                    // UserModel.login(name, password);
+                                    UserModel.login(name, password);
+                                    getActivity().runOnUiThread(()-> {
+                                        Toast.makeText(getContext(), "Login success!", Toast.LENGTH_SHORT).show();
+                                    });
                                     ((ProfileActivity) getActivity()).toProfile();
-//                                    } catch (ApiFailException e) {
-//                                        Toast.makeText(getContext(), "登录失败", Toast.LENGTH_SHORT).show();
-//                                    }
+                                    } catch (ApiFailException e) {
+                                        getActivity().runOnUiThread(()-> {
+                                            Toast.makeText(getContext(), "Failed: " + e.getApiResult().msg, Toast.LENGTH_SHORT).show();
+                                        });
+                                    }
                                 }).start();
                             } else
                                 Toast.makeText(getContext(), "请输入正确的用户名", Toast.LENGTH_SHORT).show();
@@ -99,8 +105,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                                     try {
                                         Log.d("userinfo", "onClick: " + name + "pass:" + password);
                                         UserModel.register(name, password, phone);
+                                        getActivity().runOnUiThread(()-> {
+                                            Toast.makeText(getContext(), "Register success!", Toast.LENGTH_SHORT).show();
+                                        });
                                     } catch (ApiFailException e) {
-                                        Toast.makeText(getContext(), "登录失败", Toast.LENGTH_SHORT).show();
+                                        getActivity().runOnUiThread(()->{
+                                            Toast.makeText(getContext(), "Failed: " + e.getApiResult().msg, Toast.LENGTH_SHORT).show();
+                                        });
                                     }
                                 }).start();
                             } else

@@ -47,12 +47,13 @@ public class MainActivity extends AppCompatActivity {
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         });
         findViewById(R.id.avatar).setOnClickListener((v) -> startActivity(new Intent(this, ProfileActivity.class)));
-        Log.i("test", MainApplication.getContext() == null ? "null context" : "has context");
-        String test = MainApplication.getState().getMeta("test_meta");
-        Log.i("test", "Test 1: " + test);
-        MainApplication.getState().setMeta("test_meta", "haha!");
-        test = MainApplication.getState().getMeta("test_meta");
-        Log.i("test", "Test 2: " + test);
+//        MainApplication.getState().userLogout();
+//        Log.i("test", MainApplication.getContext() == null ? "null context" : "has context");
+//        String test = MainApplication.getState().getMeta("test_meta");
+//        Log.i("test", "Test 1: " + test);
+//        MainApplication.getState().setMeta("test_meta", "haha!");
+//        test = MainApplication.getState().getMeta("test_meta");
+//        Log.i("test", "Test 2: " + test);
     }
 
     private void initPage() {

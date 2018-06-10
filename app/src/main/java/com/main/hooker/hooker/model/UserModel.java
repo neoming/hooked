@@ -68,10 +68,10 @@ public class UserModel {
                 .build();
         ApiResult result = Http.post("user/login", body);
         JsonObject data = result.data.getAsJsonObject();
-        if (data == null || data.getAsJsonObject("uid") == null || data.getAsJsonObject("api_token") == null)
+        if (data == null || data.getAsJsonPrimitive("uid") == null || data.getAsJsonPrimitive("api_token") == null)
             throw new ApiFailException();
-        int uid = data.getAsJsonObject("uid").getAsInt();
-        String api_token = data.getAsJsonObject("api_token").getAsString();
+        int uid = data.getAsJsonPrimitive("uid").getAsInt();
+        String api_token = data.getAsJsonPrimitive("api_token").getAsString();
         state.userLogin(uid, api_token);
     }
 
@@ -141,9 +141,9 @@ public class UserModel {
                         .build()
         );
         JsonObject data = result.data.getAsJsonObject();
-        if (data == null || data.getAsJsonObject("is_favored") == null)
+        if (data == null || data.getAsJsonPrimitive("is_favored") == null)
             throw new ApiFailException();
-        int is_favored = data.getAsJsonObject("is_favored").getAsInt();
+        int is_favored = data.getAsJsonPrimitive("is_favored").getAsInt();
         return is_favored == 1;
     }
 

@@ -1,6 +1,7 @@
 package com.main.hooker.hooker.utils;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.main.hooker.hooker.utils.state.MetaItem;
 import com.yuyh.easydao.DB;
@@ -69,7 +70,7 @@ public class State {
         try {
             IDAO<MetaItem> dao = getMetaDao();
             List<MetaItem> list = dao.findByCondition("key = '" + key + "'");
-            if (list == null || list.size() <= 0) {
+            if (list == null || list.size() > 0) {
                 MetaItem item = list.get(0);
                 dao.delete(item.getId());
             }
