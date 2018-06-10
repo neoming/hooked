@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".views.NotificationActivity"
+            android:name=".views.MomentsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".views.SearchActivity"

@@ -39,7 +39,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:elevation="3dp"
-            android:src="@drawable/ic_full_alarm"
+            android:src="@drawable/ic_ali_moments"
             android:tint="@android:color/white" />
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -53,5 +53,7 @@
         android:id="@+id/indicator"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:layout_gravity="bottom"></net.lucode.hackware.magicindicator.MagicIndicator>
+        android:layout_gravity="bottom">
+
+    </net.lucode.hackware.magicindicator.MagicIndicator>
 </FrameLayout>

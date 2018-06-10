@@ -1,5 +1,7 @@
 package com.main.hooker.hooker.components;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,7 +32,7 @@ import java.util.concurrent.Callable;
 
 
 public class ChatBookFragment extends Fragment {
-
+    private Context mContext;
     private List<Bubble> bubbles = new ArrayList<>();
     private List<Bubble> bubbleCache = new ArrayList<>();
     private Book book;
@@ -49,6 +51,12 @@ public class ChatBookFragment extends Fragment {
         fragment.book = book;
         fragment.mPage = nowPage - 1;
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
     }
 
     @Nullable
@@ -111,7 +119,7 @@ public class ChatBookFragment extends Fragment {
         new Thread(() -> {
             try {
                 ArrayList<Bubble> list = BookModel.getBubbles(book.id, mPage);
-                getActivity().runOnUiThread(() -> {
+                ((Activity) mContext).runOnUiThread(() -> {
                     if(!backward) {
                         if(list==null || list.size()==0){
                             mHasMore = false;
@@ -147,15 +155,20 @@ public class ChatBookFragment extends Fragment {
 
         @Override
         protected void convert(BaseViewHolder helper, Bubble item) {
+            Log.d(TAG, "convert: position = " + item.position);
             if (item.position == 0) {
                 helper.setText(R.id.character, item.character == null ? "unknown" : item.character.name);
                 helper.setText(R.id.content, item.content);
                 helper.setGone(R.id.card, true);
                 helper.setGone(R.id.card2, false);
-            } else {
+            } else if (item.position == 1){
                 helper.setText(R.id.character2, item.character == null ? "unknown" : item.character.name);
                 helper.setText(R.id.content2, item.content);
                 helper.setGone(R.id.card2, true);
+                helper.setGone(R.id.card, false);
+            } else {
+                helper.setText(R.id.text, item.content);
+                helper.setGone(R.id.card2, false);
                 helper.setGone(R.id.card, false);
             }
         }

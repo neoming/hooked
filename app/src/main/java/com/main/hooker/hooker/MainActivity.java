@@ -13,7 +13,7 @@ import android.widget.ImageView;
 
 import com.main.hooker.hooker.components.PageFragment;
 import com.main.hooker.hooker.utils.Tool;
-import com.main.hooker.hooker.views.NotificationActivity;
+import com.main.hooker.hooker.views.MomentsActivity;
 import com.main.hooker.hooker.views.ProfileActivity;
 import com.main.hooker.hooker.views.SearchActivity;
 import com.squareup.picasso.Picasso;
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Picasso.get().load(R.drawable.avatar).into((ImageView) findViewById(R.id.avatar));
         initPage();
-        findViewById(R.id.icon_notification).setOnClickListener((v) -> startActivity(new Intent(this, NotificationActivity.class)));
+        findViewById(R.id.icon_notification).setOnClickListener((v) -> startActivity(new Intent(this, MomentsActivity.class)));
         findViewById(R.id.icon_search).setOnClickListener((v) -> {
             startActivity(new Intent(this, SearchActivity.class));
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

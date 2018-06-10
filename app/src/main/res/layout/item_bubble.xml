@@ -11,10 +11,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:layout_marginEnd="4dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"
-        android:transitionName="@string/transition_name_card"
         android:visibility="gone"
         app:cardBackgroundColor="@color/waterBubble"
         app:cardCornerRadius="6dp"
@@ -53,8 +52,8 @@
         android:layout_gravity="end"
         android:layout_marginBottom="10dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"
-        android:transitionName="@string/transition_name_card"
         android:visibility="gone"
         app:cardBackgroundColor="@color/whiteBubble"
         app:cardCornerRadius="6dp"
@@ -86,4 +85,13 @@
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="衣服渐渐消失了"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp" />
 </FrameLayout>
