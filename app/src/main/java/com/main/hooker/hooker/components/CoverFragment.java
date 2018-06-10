@@ -1,20 +1,29 @@
 package com.main.hooker.hooker.components;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.transition.TransitionInflater;
 import android.transition.TransitionManager;
+import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.main.hooker.hooker.MainApplication;
 import com.main.hooker.hooker.R;
 import com.main.hooker.hooker.entity.Book;
+import com.main.hooker.hooker.model.BookModel;
+import com.main.hooker.hooker.model.UserModel;
+import com.main.hooker.hooker.utils.State;
+import com.main.hooker.hooker.utils.http.ApiFailException;
 import com.squareup.picasso.Picasso;
 
 public class CoverFragment extends Fragment {
@@ -41,6 +50,12 @@ public class CoverFragment extends Fragment {
         TextView tv = view.findViewById(R.id.title);
         Picasso.get().load(book.cover_img).into((ImageView) view.findViewById(R.id.cover));
         tv.setText(book.title);
+        TextView tvAuthor = view.findViewById(R.id.author);
+        tvAuthor.setText(book.author == null ? "unknown" : book.author.username);
+        TextView favoredCount = view.findViewById(R.id.loved);
+        favoredCount.setText(String.valueOf(book.favor_count));
+        TextView desc = view.findViewById(R.id.description);
+        desc.setText(book.desc);
         chatBookFragment = ChatBookFragment.newInstance(book);
         view.setOnClickListener(v ->
         {
@@ -52,7 +67,34 @@ public class CoverFragment extends Fragment {
                     .addToBackStack(null)
                     .commit();
         });
-        final Handler handler = new Handler();
+        checkIsFavored();
+    }
+
+    private void setFavorIcon(boolean lit){
+        ImageView icon = getView().findViewById(R.id.icon_notification);
+        if(lit){
+            icon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(),R.color.litYellow)));
+        } else {
+            icon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(),R.color.white)));
+        }
+    }
+
+    private void checkIsFavored(){
+        State state = MainApplication.getState();
+        if(!state.userHasLogin()){
+            return;
+        }
+        new Thread(()->{
+            try {
+                boolean isFavored = UserModel.isFavored(book.id);
+                getActivity().runOnUiThread(()->{
+                    setFavorIcon(isFavored);
+                });
+            } catch (ApiFailException e) {
+                e.printStackTrace();
+                Log.e("test", e.getApiResult().msg);
+            }
+        }).start();
     }
 
 }

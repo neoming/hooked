@@ -8,4 +8,6 @@
     <color name="japanBlue">#4d5aaf</color>
     <color name="japanRed">#FF6469</color>
     <color name="japanGray">#e7e7eb</color>
+    <color name="litYellow">#E6A23C</color>
+    <color name="white">#fff</color>
 </resources>
