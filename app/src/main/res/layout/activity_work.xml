@@ -28,17 +28,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="我的创作"
+                android:text="My Works"
                 android:textColor="@android:color/primary_text_dark"
                 android:textSize="14sp" />
 
             <TextView
+                style="@style/Base.TextAppearance.AppCompat.Widget.Button.Inverse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="写作品"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                style="@style/Base.TextAppearance.AppCompat.Widget.Button.Inverse"/>
+                android:text="New" />
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
     <android.support.v7.widget.RecyclerView

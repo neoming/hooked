@@ -20,7 +20,7 @@ public class MomentAdapter extends BaseQuickAdapter<Message, BaseViewHolder> {
 
     @Override
     protected void convert(BaseViewHolder helper, Message item) {
-        Picasso.get().load(item.getAvatar_res()).into((ImageView) helper.getView(R.id.avatar));
+        Picasso.get().load(item.getAvatar_res()).into((ImageView) helper.getView(R.id.cover_logo));
         Picasso.get().load(item.getPic_res()).into((ImageView) helper.getView(R.id.photo));
         helper.setText(R.id.name, item.getName());
         helper.setText(R.id.num1, String.valueOf(item.getStar_num()));

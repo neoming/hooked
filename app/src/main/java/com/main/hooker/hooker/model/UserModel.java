@@ -28,6 +28,7 @@ public class UserModel {
                 return true;
             } catch (ApiFailException e) {
                 if (e.getApiResult().code == 500) {
+                    state.userLogout();
                     return false;
                 }
                 throw e;

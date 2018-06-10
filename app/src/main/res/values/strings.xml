@@ -4,4 +4,5 @@
     <string name="transition_name_title">transition:NAME</string>
     <string name="transition_name_card">transition:CARD</string>
     <string name="transition_name_cover">transition:COVER</string>
+    <string name="at_symbol">\@</string>
 </resources>

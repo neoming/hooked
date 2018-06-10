@@ -128,7 +128,7 @@ public class PageFragment extends Fragment {
                             adapter.addData(bookWrappers);
                             adapter.loadMoreComplete();
                         } else {
-                            Toast.makeText(getContext(), "There is no more", Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getContext(), "There is no more", Toast.LENGTH_LONG).show();
                             adapter.loadMoreEnd(true);
                         }
                     } else {

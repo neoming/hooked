@@ -5,12 +5,13 @@
     android:background="#EEEEEE">
 
     <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_user_avatar"
         android:layout_width="72dp"
         android:layout_height="72dp"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_marginEnd="16dp"
-        android:src="@drawable/avatar" />
+        android:src="@drawable/avatar_placeholder" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,6 +22,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/profile_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="infinitex"
@@ -28,6 +30,7 @@
             android:textSize="12sp" />
 
         <TextView
+            android:id="@+id/profile_full_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Yiyang Xu"
@@ -48,6 +51,7 @@
                 android:id="@+id/works">
 
                 <TextView
+                    android:id="@+id/profile_works_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -57,7 +61,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="作品"
+                    android:text="Works"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -69,6 +73,7 @@
                 android:id="@+id/follower">
 
                 <TextView
+                    android:id="@+id/profile_followed_by_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -78,7 +83,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="粉丝"
+                    android:text="Followers"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -90,6 +95,7 @@
                 android:id="@+id/following">
 
                 <TextView
+                    android:id="@+id/profile_following_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -99,7 +105,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="关注"
+                    android:text="Following"
                     android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
