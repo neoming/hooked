@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.main.hooker.hooker.components.PageFragment;
@@ -34,11 +35,19 @@ public class MainActivity extends AppCompatActivity {
     private final static int PAGE_NUM = 5;
     ViewPager pager;
     private List<PageFragment> pages = new ArrayList<>();
+    private View appbar;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        appbar.animate().alpha(1.0f).setDuration(300).start();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        appbar = findViewById(R.id.appbar);
         Picasso.get().load(R.drawable.avatar).into((ImageView) findViewById(R.id.avatar));
         initPage();
         findViewById(R.id.icon_notification).setOnClickListener((v) -> startActivity(new Intent(this, MomentsActivity.class)));

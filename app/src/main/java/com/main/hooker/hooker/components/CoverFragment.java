@@ -23,6 +23,9 @@ public class CoverFragment extends Fragment {
 
     private ChatBookFragment chatBookFragment;
 
+    private View appbar;
+    private View detail;
+
     public static CoverFragment newInstance(Book book) {
         CoverFragment fragment = new CoverFragment();
         fragment.book = book;
@@ -42,6 +45,11 @@ public class CoverFragment extends Fragment {
         Picasso.get().load(book.cover_img).into((ImageView) view.findViewById(R.id.cover));
         tv.setText(book.title);
         chatBookFragment = ChatBookFragment.newInstance(book);
+        detail = view.findViewById(R.id.detail);
+        appbar = view.findViewById(R.id.appbar);
+
+        detail.animate().alpha(1.0f).setStartDelay(500);
+        appbar.animate().alpha(1.0f).setStartDelay(500);
         view.setOnClickListener(v ->
         {
             getActivity()
@@ -52,7 +60,12 @@ public class CoverFragment extends Fragment {
                     .addToBackStack(null)
                     .commit();
         });
-        final Handler handler = new Handler();
+    }
+
+
+    public void hideAll() {
+        detail.setVisibility(View.GONE);
+        appbar.setVisibility(View.GONE);
     }
 
 }
