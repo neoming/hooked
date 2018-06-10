@@ -8,20 +8,15 @@ import com.yuyh.easydao.exception.DBException;
 import com.yuyh.easydao.interfaces.IDAO;
 import com.yuyh.easydao.interfaces.IDBListener;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class State {
-    Context mContext;
-
     private static final String database = "dianshu";
+    Context mContext;
+    private IDBListener listener = (dao, oldVersion, newVersion) -> {
+    };
 
-    enum Meta {uid, api_token}
-
-    private IDBListener listener = (dao, oldVersion, newVersion) -> {};
-
-    public State(Context context){
+    public State(Context context) {
         mContext = context;
     }
 
@@ -29,7 +24,7 @@ public class State {
         return DB.getInstance(mContext).getDatabase(1, database, listener);
     }
 
-    public void clearAll(){
+    public void clearAll() {
         DB.getInstance(mContext).deleteDatabase(database);
     }
 
@@ -37,11 +32,11 @@ public class State {
         return DB.getInstance(mContext).getDatabase(1, database, "meta", MetaItem.class, listener);
     }
 
-    public String getMeta(String key){
+    public String getMeta(String key) {
         try {
             IDAO<MetaItem> dao = getMetaDao();
             List<MetaItem> list = dao.findByCondition("key = '" + key + "'");
-            if(list == null || list.size() <= 0){
+            if (list == null || list.size() <= 0) {
                 return null;
             } else {
                 MetaItem item = list.get(0);
@@ -53,11 +48,11 @@ public class State {
         }
     }
 
-    public void setMeta(String key, String value){
+    public void setMeta(String key, String value) {
         try {
             IDAO<MetaItem> dao = getMetaDao();
             List<MetaItem> list = dao.findByCondition("key = '" + key + "'");
-            if(list == null || list.size() <= 0){
+            if (list == null || list.size() <= 0) {
                 MetaItem item = new MetaItem(key, value);
                 dao.save(item);
             } else {
@@ -70,11 +65,11 @@ public class State {
         }
     }
 
-    public void removeMeta(String key){
+    public void removeMeta(String key) {
         try {
             IDAO<MetaItem> dao = getMetaDao();
             List<MetaItem> list = dao.findByCondition("key = '" + key + "'");
-            if(list == null || list.size() <= 0){
+            if (list == null || list.size() <= 0) {
                 MetaItem item = list.get(0);
                 dao.delete(item.getId());
             }
@@ -83,27 +78,29 @@ public class State {
         }
     }
 
-    public boolean userHasLogin(){
+    public boolean userHasLogin() {
         String uid = getMeta("user_uid");
         String api_token = getMeta("user_api_token");
         return uid != null && api_token != null;
     }
 
-    public void userLogin(int uid, String api_token){
+    public void userLogin(int uid, String api_token) {
         setMeta("user_uid", String.valueOf(uid));
         setMeta("user_api_token", api_token);
     }
 
-    public void userLogout(){
+    public void userLogout() {
         removeMeta("user_uid");
         removeMeta("user_api_token");
     }
 
-    public int userGetUid(){
+    public int userGetUid() {
         return Integer.valueOf(getMeta("user_uid"));
     }
 
-    public String userGetApiToken(){
+    public String userGetApiToken() {
         return getMeta("user_api_token");
     }
+
+    enum Meta {uid, api_token}
 }

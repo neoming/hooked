@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.main.hooker.hooker">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:name=".MainApplication"
         android:allowBackup="true"
@@ -16,6 +19,7 @@
             android:theme="@style/HomePageTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -28,10 +32,18 @@
         <activity
             android:name=".views.ProfileActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".views.ContentActivity"
+        <activity
+            android:name=".views.ContentActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/HomePageTheme"/>
+            android:theme="@style/HomePageTheme" />
+        <activity
+            android:name=".views.FollowActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.FollowerActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".views.WorkActivity"
+            android:screenOrientation="portrait" />
     </application>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
 </manifest>

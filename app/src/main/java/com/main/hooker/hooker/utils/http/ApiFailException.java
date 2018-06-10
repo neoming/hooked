@@ -3,11 +3,11 @@ package com.main.hooker.hooker.utils.http;
 public class ApiFailException extends Exception {
     private ApiResult mApiResult;
 
-    public ApiFailException(){
+    public ApiFailException() {
         this(new ApiResult());
     }
 
-    public ApiFailException(ApiResult apiResult){
+    public ApiFailException(ApiResult apiResult) {
         mApiResult = apiResult;
     }
 

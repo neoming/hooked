@@ -1,24 +1,22 @@
 package com.main.hooker.hooker.views;
 
-import android.support.annotation.NonNull;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.main.hooker.hooker.R;
 import com.main.hooker.hooker.entity.Message;
+import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -40,9 +38,13 @@ public class ProfileActivity extends AppCompatActivity {
                 new Message(R.drawable.avatar_6, R.drawable.photo_6, random.nextInt(10), random.nextInt(20), "xyy", ""),
                 new Message(R.drawable.avatar_7, R.drawable.photo_7, random.nextInt(10), random.nextInt(20), "xyy", "")
         ));
-        adapter.addHeaderView(View.inflate(this, R.layout.header_profile, null));
+        View header = View.inflate(this, R.layout.header_profile, null);
+        adapter.addHeaderView(header);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        header.findViewById(R.id.follower).setOnClickListener((v -> startActivity(new Intent(this, FollowerActivity.class))));
+        header.findViewById(R.id.following).setOnClickListener((v -> startActivity(new Intent(this, FollowActivity.class))));
+        header.findViewById(R.id.works).setOnClickListener((v -> startActivity(new Intent(this, WorkActivity.class))));
     }
 
     public void finish(View view) {
@@ -58,8 +60,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         @Override
         protected void convert(BaseViewHolder helper, Message item) {
-            Glide.with(mContext).load(item.getAvatar_res()).into((ImageView) helper.getView(R.id.avatar));
-            Glide.with(mContext).load(item.getPic_res()).into((ImageView) helper.getView(R.id.photo));
+            Picasso.get().load(item.getAvatar_res()).into((ImageView) helper.getView(R.id.avatar));
+            Picasso.get().load(item.getPic_res()).into((ImageView) helper.getView(R.id.photo));
             helper.setText(R.id.name, item.getName());
             helper.setText(R.id.num1, String.valueOf(item.getStar_num()));
             helper.setText(R.id.num2, String.valueOf(item.getComment_num()));

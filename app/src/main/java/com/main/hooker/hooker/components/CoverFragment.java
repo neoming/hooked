@@ -7,19 +7,24 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.main.hooker.hooker.R;
+import com.main.hooker.hooker.entity.Book;
+import com.squareup.picasso.Picasso;
 
 
 public class CoverFragment extends Fragment {
-    private String title;
-    private ChatBookFragment book = new ChatBookFragment();
-    public static CoverFragment newInstance(String title) {
+    private Book book;
+    private ChatBookFragment chatBookFragment;
+
+    public static CoverFragment newInstance(Book book) {
         CoverFragment fragment = new CoverFragment();
-        fragment.title = title;
+        fragment.book = book;
         return fragment;
     }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_cover, container, false);
@@ -29,14 +34,16 @@ public class CoverFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         TextView tv = view.findViewById(R.id.title);
-        tv.setText(title);
+        Picasso.get().load(book.cover_img).into((ImageView) view.findViewById(R.id.cover));
+        tv.setText(book.title);
+        chatBookFragment = ChatBookFragment.newInstance(book);
         view.setOnClickListener(v ->
         {
             getActivity()
                     .getSupportFragmentManager()
                     .beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_bottom, R.anim.slide_in_top, R.anim.slide_out_top)
-                    .add(R.id.fragment, book)
+                    .add(R.id.fragment, chatBookFragment)
                     .addToBackStack(null)
                     .commit();
         });

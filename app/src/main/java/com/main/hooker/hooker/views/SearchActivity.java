@@ -1,7 +1,7 @@
 package com.main.hooker.hooker.views;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.main.hooker.hooker.R;
 

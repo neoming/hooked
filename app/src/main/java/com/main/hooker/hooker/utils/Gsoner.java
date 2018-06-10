@@ -5,13 +5,14 @@ import com.google.gson.GsonBuilder;
 
 public class Gsoner {
     private static Gson mGason;
-    private static Gson generate(){
+
+    private static Gson generate() {
         return new GsonBuilder().enableComplexMapKeySerialization()
-                        .create();
+                .create();
     }
 
-    public static Gson get(){
-        if(mGason == null){
+    public static Gson get() {
+        if (mGason == null) {
             mGason = generate();
         }
         return mGason;

@@ -7,15 +7,15 @@ public class ApiResult {
     public String msg;
     public JsonElement data;
 
-    public ApiResult(){
+    public ApiResult() {
         this(555, "unknown issues", null);
     }
 
-    public ApiResult(int code, String msg){
+    public ApiResult(int code, String msg) {
         this(code, msg, null);
     }
 
-    public ApiResult(int code, String msg, JsonElement data){
+    public ApiResult(int code, String msg, JsonElement data) {
         this.code = code;
         this.msg = msg;
         this.data = data;

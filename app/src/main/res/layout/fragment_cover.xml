@@ -3,14 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="4dp"
-    android:background="#123"
-    android:transitionName="@string/transition_name_card">
+    android:background="#123">
 
+    <ImageView
+        android:id="@+id/cover"
+        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:transitionName="@string/transition_name_cover"/>
     <TextView
         android:id="@+id/title"
+        android:transitionName="@string/transition_name_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:textColor="@android:color/white"
-        android:textSize="40sp" />
+        android:textSize="30sp"
+        android:textStyle="bold"/>
 </RelativeLayout>

@@ -44,7 +44,8 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:id="@+id/works">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -56,7 +57,28 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Follower"
+                    android:text="作品"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginStart="24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/follower">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@android:color/primary_text_light"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="粉丝"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -64,7 +86,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="24dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:id="@+id/following">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -76,7 +99,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Follower"
+                    android:text="关注"
                     android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>

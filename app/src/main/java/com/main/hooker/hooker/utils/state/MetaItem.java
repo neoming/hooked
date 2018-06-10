@@ -3,7 +3,7 @@ package com.main.hooker.hooker.utils.state;
 import com.yuyh.easydao.annotation.Column;
 import com.yuyh.easydao.base.BaseEntity;
 
-public class MetaItem extends BaseEntity{
+public class MetaItem extends BaseEntity {
 
     @Column
     private String key;
@@ -11,11 +11,11 @@ public class MetaItem extends BaseEntity{
     @Column
     private String value;
 
-    public MetaItem(){
+    public MetaItem() {
         super();
     }
 
-    public MetaItem(String key, String value){
+    public MetaItem(String key, String value) {
         this.key = key;
         this.value = value;
     }

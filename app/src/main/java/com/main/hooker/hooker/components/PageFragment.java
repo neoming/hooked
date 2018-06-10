@@ -3,8 +3,10 @@ package com.main.hooker.hooker.components;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.transition.TransitionManager;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
@@ -14,18 +16,23 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.main.hooker.hooker.R;
+import com.main.hooker.hooker.entity.Book;
+import com.main.hooker.hooker.entity.BookWrapper;
+import com.main.hooker.hooker.kits.CustomLoadMore;
 import com.main.hooker.hooker.model.BookModel;
 import com.main.hooker.hooker.utils.Tool;
 import com.main.hooker.hooker.utils.http.ApiFailException;
 import com.main.hooker.hooker.views.ContentActivity;
-import com.main.hooker.hooker.R;
-import com.main.hooker.hooker.entity.Book;
-import com.main.hooker.hooker.kits.CustomLoadMore;
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class PageFragment extends Fragment {
@@ -41,7 +48,7 @@ public class PageFragment extends Fragment {
     }
 
 
-    public void setIndex(int index){
+    public void setIndex(int index) {
         mType = index;
     }
 
@@ -68,11 +75,13 @@ public class PageFragment extends Fragment {
         adapter.setLoadMoreView(new CustomLoadMore());
         adapter.setOnItemClickListener((adapter, view1, position) -> {
             Intent intent = new Intent(getActivity(), ContentActivity.class);
-            Book book = (Book) adapter.getItem(position);
-            intent.putExtra("title", book.title);
-            intent.putExtra("book_id", book.id);
+            BookWrapper wrapper = (BookWrapper) adapter.getItem(position);
+            Book book = wrapper.book;
+            intent.putExtra("book", book);
             ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    getActivity(), new Pair<>(view1, getString(R.string.transition_name_card)));
+                    getActivity(),
+                    new Pair<>(view1.findViewById(R.id.cover), getString(R.string.transition_name_cover)),
+                    new Pair<>(view1.findViewById(R.id.title), getString(R.string.transition_name_title)));
             startActivity(intent, options.toBundle());
         });
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
@@ -80,32 +89,36 @@ public class PageFragment extends Fragment {
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
     }
 
-    private void load(){
+    private void load() {
         load(false);
     }
 
-    private void load(boolean more){
-        if(more){
+    private void load(boolean more) {
+        if (more) {
             mPage += 1;
         }
         new Thread(() -> {
             try {
                 ArrayList<Book> list = BookModel.getList(Tool.indexToType(mType), mPage);
+                List<BookWrapper> bookWrappers = new ArrayList<>();
+                for (Book book : list) {
+                    bookWrappers.add(new BookWrapper(book));
+                }
                 getActivity().runOnUiThread(() -> {
-                    if(more){
-                        if(list!=null && list.size()>0){
-                            adapter.addData(list);
+                    if (more) {
+                        if (list != null && list.size() > 0) {
+                            adapter.addData(bookWrappers);
                             adapter.loadMoreComplete();
-                        }else{
+                        } else {
                             Toast.makeText(getContext(), "There is no more", Toast.LENGTH_LONG).show();
                             adapter.loadMoreEnd(true);
                         }
-                    }else{
-                        adapter.setNewData(list);
+                    } else {
+                        adapter.setNewData(bookWrappers);
                     }
                 });
             } catch (ApiFailException e) {
-                if(more){
+                if (more) {
                     adapter.loadMoreFail();
                 }
                 Toast.makeText(getContext(), "Error:" + e.getApiResult().msg, Toast.LENGTH_LONG).show();
@@ -119,16 +132,18 @@ public class PageFragment extends Fragment {
     }
 
 
-    private static class CoverAdapter extends BaseQuickAdapter<Book, BaseViewHolder> {
+    private static class CoverAdapter extends BaseQuickAdapter<BookWrapper, BaseViewHolder> {
 
         CoverAdapter(int layoutResId) {
             super(layoutResId);
         }
 
         @Override
-        protected void convert(BaseViewHolder helper, Book item) {
+        protected void convert(BaseViewHolder helper, BookWrapper wrapper) {
+            Book item = wrapper.book;
             helper.setText(R.id.title, item.title);
-            helper.itemView.getLayoutParams().height = 600;
+            helper.itemView.getLayoutParams().height = wrapper.height;
+            Picasso.get().load(item.cover_img).into((ImageView) helper.getView(R.id.cover));
         }
     }
 }

@@ -19,7 +19,7 @@ public class Http {
     public static ApiResult post(String apiUri, RequestBody requestBody) throws ApiFailException {
         OkHttpClient client = new OkHttpClient();
         Request.Builder builder = new Request.Builder().url(apiGate + apiUri);
-        if(requestBody != null){
+        if (requestBody != null) {
             builder.post(requestBody);
         }
         Request request = builder.build();
@@ -46,14 +46,14 @@ public class Http {
             String text = response.body() != null ? response.body().string() : null;
             Gson json = Gsoner.get();
             ApiResult result = json.fromJson(text, ApiResult.class);
-            if(result == null){
+            if (result == null) {
                 throw new Exception();
             }
-            if(result.code != 200){
+            if (result.code != 200) {
                 throw new ApiFailException(result);
             }
             return result;
-        } catch (ApiFailException e){
+        } catch (ApiFailException e) {
             throw e;
         } catch (Exception e) {
             throw new ApiFailException(new ApiResult());

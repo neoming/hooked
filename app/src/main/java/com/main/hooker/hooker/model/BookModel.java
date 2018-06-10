@@ -1,7 +1,5 @@
 package com.main.hooker.hooker.model;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.main.hooker.hooker.entity.Book;
@@ -21,7 +19,8 @@ public class BookModel {
     public static ArrayList<Book> getList(String type, int page) throws ApiFailException {
         ApiResult result = Http.get("book/" + type + "?page=" + String.valueOf(page));
         Gson gson = Gsoner.get();
-        Type bookListType = new TypeToken<ArrayList<Book>>(){}.getType();
+        Type bookListType = new TypeToken<ArrayList<Book>>() {
+        }.getType();
         return gson.fromJson(result.data, bookListType);
     }
 }

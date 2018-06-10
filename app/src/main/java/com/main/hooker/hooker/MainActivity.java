@@ -11,12 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.main.hooker.hooker.components.PageFragment;
 import com.main.hooker.hooker.utils.Tool;
 import com.main.hooker.hooker.views.NotificationActivity;
 import com.main.hooker.hooker.views.ProfileActivity;
 import com.main.hooker.hooker.views.SearchActivity;
+import com.squareup.picasso.Picasso;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -32,14 +32,14 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private final static int PAGE_NUM = 5;
-    private List<PageFragment> pages = new ArrayList<>();
     ViewPager pager;
+    private List<PageFragment> pages = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Glide.with(this).load(R.drawable.avatar).into((ImageView) findViewById(R.id.avatar));
+        Picasso.get().load(R.drawable.avatar).into((ImageView) findViewById(R.id.avatar));
         initPage();
         findViewById(R.id.icon_notification).setOnClickListener((v) -> startActivity(new Intent(this, NotificationActivity.class)));
         findViewById(R.id.icon_search).setOnClickListener((v) -> {
@@ -47,12 +47,12 @@ public class MainActivity extends AppCompatActivity {
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         });
         findViewById(R.id.avatar).setOnClickListener((v) -> startActivity(new Intent(this, ProfileActivity.class)));
-        Log.i("test", MainApplication.getContext() == null? "null context" : "has context");
+        Log.i("test", MainApplication.getContext() == null ? "null context" : "has context");
         String test = MainApplication.getState().getMeta("test_meta");
-        Log.i("test", "Test 1: "+test);
+        Log.i("test", "Test 1: " + test);
         MainApplication.getState().setMeta("test_meta", "haha!");
         test = MainApplication.getState().getMeta("test_meta");
-        Log.i("test", "Test 2: "+test);
+        Log.i("test", "Test 2: " + test);
     }
 
     private void initPage() {
@@ -63,9 +63,14 @@ public class MainActivity extends AppCompatActivity {
         pager.setOffscreenPageLimit(3);
         pager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
-            public Fragment getItem(int position) { return pages.get(position); }
+            public Fragment getItem(int position) {
+                return pages.get(position);
+            }
+
             @Override
-            public int getCount() { return PAGE_NUM; }
+            public int getCount() {
+                return PAGE_NUM;
+            }
         });
 
         MagicIndicator magicIndicator = findViewById(R.id.indicator);

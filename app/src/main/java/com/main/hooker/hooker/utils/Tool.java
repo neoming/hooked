@@ -1,8 +1,8 @@
 package com.main.hooker.hooker.utils;
 
 public class Tool {
-    public static String indexToType(int index){
-        switch (index){
+    public static String indexToType(int index) {
+        switch (index) {
             case 1:
                 return "Horror";
             case 2:
