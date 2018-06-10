@@ -1,6 +1,7 @@
 package com.main.hooker.hooker.components;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 public class ProfileDetailFragment extends Fragment {
     private User user;
     private Context mContext;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -64,5 +66,6 @@ public class ProfileDetailFragment extends Fragment {
         header.findViewById(R.id.follower).setOnClickListener((v -> startActivity(new Intent(mContext, FollowerActivity.class))));
         header.findViewById(R.id.following).setOnClickListener((v -> startActivity(new Intent(mContext, FollowActivity.class))));
         header.findViewById(R.id.works).setOnClickListener((v -> startActivity(new Intent(mContext, WorkActivity.class))));
+        view.findViewById(R.id.icon_back).setOnClickListener(v -> ((Activity) mContext).finish());
     }
 }

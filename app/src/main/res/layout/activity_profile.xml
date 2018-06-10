@@ -5,43 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".views.ProfileActivity">
-
-    <android.support.v7.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@color/colorPrimary">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="16dp">
-
-            <ImageView
-                android:id="@+id/icon_back"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_centerVertical="true"
-                android:onClick="finish"
-                android:src="@drawable/ic_ali_back"
-                android:tint="@android:color/white" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="主页"
-                android:textColor="@android:color/primary_text_dark"
-                android:textSize="14sp" />
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_ali_setting"
-                android:tint="@android:color/primary_text_dark"/>
-        </RelativeLayout>
-    </android.support.v7.widget.Toolbar>
     <FrameLayout
         android:id="@+id/fragment"
         android:layout_width="match_parent"
