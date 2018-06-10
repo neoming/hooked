@@ -13,6 +13,7 @@ import android.support.v4.util.Pair;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,8 +81,7 @@ public class PageFragment extends Fragment {
             intent.putExtra("book", book);
             ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                     getActivity(),
-                    new Pair<>(view1.findViewById(R.id.cover), getString(R.string.transition_name_cover)),
-                    new Pair<>(view1.findViewById(R.id.title), getString(R.string.transition_name_title)));
+                    new Pair<>(view1.findViewById(R.id.cover), getString(R.string.transition_name_cover)));
             startActivity(intent, options.toBundle());
         });
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
@@ -121,7 +121,8 @@ public class PageFragment extends Fragment {
                 if (more) {
                     adapter.loadMoreFail();
                 }
-                Toast.makeText(getContext(), "Error:" + e.getApiResult().msg, Toast.LENGTH_LONG).show();
+                Log.e("api", "load: "+e.getApiResult().msg);
+              //  Toast.makeText(getContext(), "Error:" + e.getApiResult().msg, Toast.LENGTH_LONG).show();
             }
         }).start();
     }

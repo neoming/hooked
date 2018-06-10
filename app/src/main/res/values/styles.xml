@@ -8,15 +8,22 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentTransitions">true</item>
-        <item name="android:windowAllowEnterTransitionOverlap">false</item>
-        <item name="android:windowAllowReturnTransitionOverlap">false</item>
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
     </style>
 
     <style name="HomePageTheme" parent="AppTheme">
         <item name="android:listDivider">@drawable/list_divider</item>
         <item name="android:windowBackground">@android:color/black</item>
-        <item name="android:windowSharedElementEnterTransition">@transition/cover_enter</item>
-        <item name="android:windowSharedElementExitTransition">@transition/cover_exit</item>
+        <item name="android:windowSharedElementEnterTransition">@transition/cover_share</item>
+        <item name="android:windowSharedElementExitTransition">@transition/cover_share</item>
+        <item name="android:windowExitTransition">@transition/title_exit</item>
+    </style>
+
+    <style name="CoverTheme" parent="AppTheme">
+        <item name="android:windowEnterTransition">@transition/cover</item>
+        <item name="android:listDivider">@drawable/list_divider</item>
+        <item name="android:windowBackground">@android:color/black</item>
     </style>
 
 </resources>

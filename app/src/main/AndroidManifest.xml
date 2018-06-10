@@ -35,7 +35,7 @@
         <activity
             android:name=".views.ContentActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/HomePageTheme" />
+            android:theme="@style/CoverTheme" />
         <activity
             android:name=".views.FollowActivity"
             android:screenOrientation="portrait" />
