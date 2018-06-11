@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#4A4F70</color>
-    <color name="colorPrimaryDark">#AAADFE</color>
+    <color name="colorPrimaryDark">#aaadfe</color>
     <color name="colorAccent">#44617b</color>
     <color name="waterBubble">#f3f3f2</color>
     <color name="whiteBubble">#bce2e8</color>
     <color name="japanBlue">#4d5aaf</color>
-    <color name="japanRed">#FF6469</color>
+    <color name="japanRed">#ff6469</color>
     <color name="japanGray">#e7e7eb</color>
     <color name="litYellow">#E6A23C</color>
     <color name="white">#fff</color>
+    <color name="WayLightRed">#fff0ec</color>
+    <color name="LightRed">#fc9376</color>
 </resources>

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -14,8 +15,11 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.main.hooker.hooker.R;
 import com.main.hooker.hooker.adapter.FollowAdapter;
+import com.main.hooker.hooker.entity.Favor;
 import com.main.hooker.hooker.entity.Follow;
 import com.main.hooker.hooker.entity.User;
+import com.main.hooker.hooker.model.UserModel;
+import com.main.hooker.hooker.utils.http.ApiFailException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,27 +29,25 @@ public class FollowActivity extends AppCompatActivity {
     private SwipeRefreshLayout refreshLayout;
     private FollowAdapter adapter;
     private RecyclerView recyclerView;
+    private List<User> mFollowings = new ArrayList<>();
+    private boolean mHasMore = true;
+    private int mPage = 0;
+    private boolean isLoading = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_follow);
-        List<User> followings = new ArrayList<>();
         refreshLayout = findViewById(R.id.refresh);
         recyclerView = findViewById(R.id.recycler);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        for (int i = 0; i < 10; i++) {
-            followings.add(new User());
-        }
-        adapter = new FollowAdapter(R.layout.item_follow_user, followings);
-        adapter.setEnableLoadMore(true);
+        adapter = new FollowAdapter(R.layout.item_follow_user, mFollowings);
         initRefresh();
         initLoadMore();
-
-        View header = View.inflate(this, R.layout.header_add_follow, null);
-        adapter.addHeaderView(header);
-
+        //View header = View.inflate(this, R.layout.header_add_follow, null);
+        //adapter.addHeaderView(header);
         recyclerView.setAdapter(adapter);
+        load();
     }
 
     private void initLoadMore() {
@@ -57,21 +59,71 @@ public class FollowActivity extends AppCompatActivity {
         refreshLayout.setColorSchemeResources(R.color.japanBlue);
         adapter.setEnableLoadMore(false);
         refreshLayout.setOnRefreshListener(() -> {
-            Toast.makeText(this, "我会更新0.5秒！", Toast.LENGTH_LONG).show();
-            new Thread(()-> {
-                try {
-                    Thread.sleep(500);
-                    runOnUiThread(()->refreshLayout.setRefreshing(false));
-                    adapter.setEnableLoadMore(true);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }).start();
+            load(false, ()->{
+                refreshLayout.setRefreshing(false);
+                adapter.setEnableLoadMore(true);
+            });
         });
     }
 
     private void loadMore() {
+        if(isLoading && !mHasMore) return;
+        isLoading = true;
+        boolean more = true;
+        if(mPage == 0){
+            more = false;
+        }
+        load(more, ()-> isLoading = false);
+    }
 
+    private void load() {
+        load(false, null);
+    }
+
+    private void load(boolean more, Runnable callback) {
+        if(!more){
+            mPage = 0;
+        }
+        mPage += 1;
+        mHasMore = true;
+        new Thread(()->{
+            try {
+                ArrayList<Follow> list = UserModel.getFollowings(mPage);
+                if(list == null)
+                    throw new ApiFailException();
+                ArrayList<User> userList = new ArrayList<>();
+                for (Follow follow : list){
+                    Log.e("test", follow.to_user != null ? follow.to_user.username : "no_to_user!!!");
+                    if(follow.to_user != null)
+                        userList.add(follow.to_user);
+                }
+                runOnUiThread(()->{
+                    if(mPage == 1){
+                        adapter.replaceData(userList);
+                        adapter.notifyDataSetChanged();
+                        adapter.loadMoreComplete();
+                    } else {
+                        adapter.addData(userList);
+                        adapter.loadMoreComplete();
+                        if(userList.size() == 0){
+                            adapter.loadMoreEnd(true);
+                            mHasMore = false;
+                        }
+                    }
+                    if(callback != null)
+                        callback.run();
+                });
+            } catch (ApiFailException e) {
+                e.printStackTrace();
+                runOnUiThread(()->{
+                    if(more){
+                        adapter.loadMoreFail();
+                    }
+                    if(callback != null)
+                        callback.run();
+                });
+            }
+        }).start();
     }
 
 
