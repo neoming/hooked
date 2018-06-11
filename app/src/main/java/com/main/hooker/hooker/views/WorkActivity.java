@@ -1,5 +1,6 @@
 package com.main.hooker.hooker.views;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,6 +26,7 @@ public class WorkActivity extends AppCompatActivity {
                 new Book()
         ));
         recyclerView.setAdapter(adapter);
+        findViewById(R.id.create).setOnClickListener((v -> startActivity(new Intent(this, CreateActivity.class))));
     }
     public void finish(View view) {
         finish();

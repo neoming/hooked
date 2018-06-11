@@ -161,12 +161,15 @@ public class ChatBookFragment extends Fragment {
                 helper.setText(R.id.content, item.content);
                 helper.setGone(R.id.card, true);
                 helper.setGone(R.id.card2, false);
+                helper.setGone(R.id.text, false);
             } else if (item.position == 1){
                 helper.setText(R.id.character2, item.character == null ? "unknown" : item.character.name);
                 helper.setText(R.id.content2, item.content);
                 helper.setGone(R.id.card2, true);
                 helper.setGone(R.id.card, false);
+                helper.setGone(R.id.text, false);
             } else {
+                helper.setGone(R.id.text, true);
                 helper.setText(R.id.text, item.content);
                 helper.setGone(R.id.card2, false);
                 helper.setGone(R.id.card, false);

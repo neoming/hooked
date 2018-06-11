@@ -30,9 +30,10 @@
                 android:layout_centerInParent="true"
                 android:text="My Works"
                 android:textColor="@android:color/primary_text_dark"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/create"
                 style="@style/Base.TextAppearance.AppCompat.Widget.Button.Inverse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -42,7 +42,11 @@
         <activity
             android:name=".views.FollowerActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".views.WorkActivity"
+        <activity
+            android:name=".views.WorkActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.CreateActivity"
             android:screenOrientation="portrait" />
     </application>
 

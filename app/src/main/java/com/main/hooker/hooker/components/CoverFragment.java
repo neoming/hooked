@@ -97,10 +97,12 @@ public class CoverFragment extends Fragment {
     private void checkIsFavored(){
         new Thread(()->{
             try {
-                boolean isFavored = UserModel.isFavored(book.id);
-                getActivity().runOnUiThread(()->{
-                    setFavorIcon(isFavored);
-                });
+                if (UserModel.hasLogin()) {
+                    boolean isFavored = UserModel.isFavored(book.id);
+                    getActivity().runOnUiThread(()->{
+                        setFavorIcon(isFavored);
+                    });
+                }
             } catch (ApiFailException e) {
                 e.printStackTrace();
             }

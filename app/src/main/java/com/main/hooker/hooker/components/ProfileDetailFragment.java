@@ -10,13 +10,17 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Fade;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.main.hooker.hooker.MainActivity;
 import com.main.hooker.hooker.R;
 import com.main.hooker.hooker.adapter.CollectionAdapter;
 import com.main.hooker.hooker.entity.User;
@@ -29,9 +33,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class ProfileDetailFragment extends Fragment {
     private User user;
     private Context mContext;
@@ -47,6 +49,7 @@ public class ProfileDetailFragment extends Fragment {
     public static ProfileDetailFragment newInstance(User user) {
         ProfileDetailFragment fragment = new ProfileDetailFragment();
         fragment.user = user;
+        fragment.setEnterTransition(new Fade(Fade.IN));
         return fragment;
     }
 
@@ -63,6 +66,24 @@ public class ProfileDetailFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // set up pop up menu
+        view.findViewById(R.id.popMenu).setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(getContext(), v);
+            popupMenu.getMenuInflater().inflate(R.menu.nav_menu, popupMenu.getMenu());
+            popupMenu.show();
+            popupMenu.setOnMenuItemClickListener(item -> {
+                switch (item.getItemId()) {
+                    case R.id.logout:
+                        UserModel.logout();
+                        Toast.makeText(mContext, "logout", Toast.LENGTH_SHORT).show();
+                        ((Activity) mContext).finish();
+                        break;
+                }
+                return false;
+            });
+        });
+
         RecyclerView recyclerView = view.findViewById(R.id.recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mHeaderView = View.inflate(mContext, R.layout.header_profile, null);

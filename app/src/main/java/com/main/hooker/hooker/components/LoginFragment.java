@@ -59,9 +59,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 final View loginDialog = View.inflate(getContext(), R.layout.dialog_login, null);
                 ((TextInputEditText) loginDialog.findViewById(R.id.name)).setText("heikezy");
                 ((TextInputEditText) loginDialog.findViewById(R.id.password)).setText("12345678");
-                builder.setTitle("账户密码登录")
+                builder.setTitle("Login with account")
                         .setView(loginDialog)
-                        .setPositiveButton("登录", (dialog, which) -> {
+                        .setPositiveButton("login", (dialog, which) -> {
                             // for demo
                             String name = ((TextInputEditText) loginDialog.findViewById(R.id.name)).getText().toString();
                             String password = ((TextInputEditText) loginDialog.findViewById(R.id.password)).getText().toString();
@@ -81,7 +81,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                                     }
                                 }).start();
                             } else
-                                Toast.makeText(getContext(), "请输入正确的用户名", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Please enter the right username", Toast.LENGTH_SHORT).show();
                         })
                         .create()
                         .show();
@@ -92,9 +92,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 ((TextInputEditText) registerDialog.findViewById(R.id.phone)).setText("13524121679");
                 ((TextInputEditText) registerDialog.findViewById(R.id.password)).setText("0012345");
                 ((TextInputEditText) registerDialog.findViewById(R.id.password2)).setText("0012345");
-                builder.setTitle("注册")
+                builder.setTitle("Register")
                         .setView(registerDialog)
-                        .setPositiveButton("登录", (dialog, which) -> {
+                        .setPositiveButton("submit", (dialog, which) -> {
                             // for demo
                             String name =      ((TextInputEditText) registerDialog.findViewById(R.id.name)).     getText().toString();
                             String phone =     ((TextInputEditText) registerDialog.findViewById(R.id.phone)).    getText().toString();
@@ -115,7 +115,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                                     }
                                 }).start();
                             } else
-                                Toast.makeText(getContext(), "请正确填写表格", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "please check your enter", Toast.LENGTH_SHORT).show();
                         })
                         .create()
                         .show();

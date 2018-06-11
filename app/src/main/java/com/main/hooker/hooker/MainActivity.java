@@ -8,15 +8,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.main.hooker.hooker.components.PageFragment;
 import com.main.hooker.hooker.entity.User;
 import com.main.hooker.hooker.model.UserModel;
-import com.main.hooker.hooker.utils.State;
 import com.main.hooker.hooker.utils.Tool;
 import com.main.hooker.hooker.utils.http.ApiFailException;
 import com.main.hooker.hooker.views.MomentsActivity;
@@ -40,7 +37,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
     private final static int PAGE_NUM = 6;
-    ViewPager pager;
+    private ViewPager pager;
+    private CircleImageView avatarView;
     private List<PageFragment> pages = new ArrayList<>();
     private View appbar;
 
@@ -48,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         appbar.animate().alpha(1.0f).setDuration(300).start();
+        freshUserAvatar();
     }
 
     @Override
@@ -55,8 +54,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         appbar = findViewById(R.id.appbar);
-        Picasso.get().load(R.drawable.main_icon).into((ImageView) findViewById(R.id.cover_logo));
+        avatarView = findViewById(R.id.cover_logo);
+        Picasso.get().load(R.drawable.main_icon).into(avatarView);
         initPage();
+        showWelcome();
         findViewById(R.id.icon_notification).setOnClickListener((v) -> startActivity(new Intent(this, MomentsActivity.class)));
         findViewById(R.id.icon_search).setOnClickListener((v) -> {
             startActivity(new Intent(this, SearchActivity.class));
@@ -99,37 +100,51 @@ public class MainActivity extends AppCompatActivity {
         freshUserAvatar();
     }
 
-    public void freshUserAvatar(){
-
-        new Thread(()->{
+    public void freshUserAvatar() {
+        new Thread(() -> {
             try {
-                if(UserModel.hasLogin()){
+                if (UserModel.hasLogin()) {
                     try {
                         User user = UserModel.getMe();
-                        if(user == null){
+                        if (user == null) {
                             return;
                         }
-                        runOnUiThread(()->{
-                            Toast.makeText(this, "Welcome back, " + user.username + "!", Toast.LENGTH_SHORT).show();
-                            CircleImageView imageView = findViewById(R.id.cover_logo);
-                            Picasso.get().load(user.avatar)
-                                    .placeholder(R.drawable.avatar_placeholder)
-                                    .error(R.drawable.avatar_placeholder)
-                                    .into(imageView);
-                        });
+                        runOnUiThread(() -> Picasso.get().load(user.avatar)
+                                .placeholder(R.drawable.avatar_placeholder)
+                                .error(R.drawable.avatar_placeholder)
+                                .into(avatarView));
                     } catch (ApiFailException e) {
                         e.printStackTrace();
                     }
                 } else {
-                    runOnUiThread(()->{
-                        Toast.makeText(this, "How about logging in?", Toast.LENGTH_SHORT).show();
-                    });
+                    runOnUiThread(() -> Picasso.get().load(R.drawable.main_icon).into(avatarView));
                 }
             } catch (ApiFailException e) {
                 e.printStackTrace();
             }
         }).start();
     }
+
+    public void showWelcome() {
+        new Thread(() -> {
+            try {
+                if (UserModel.hasLogin()) {
+                    try {
+                        User user = UserModel.getMe();
+                        if (user == null) return;
+                        runOnUiThread(() -> Toast.makeText(this, "Welcome back, " + user.username + "!", Toast.LENGTH_SHORT).show());
+                    } catch (ApiFailException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    runOnUiThread(() -> Toast.makeText(this, "How about logging in?", Toast.LENGTH_SHORT).show());
+                }
+            } catch (ApiFailException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
 
     private class NavigatorAdapter extends CommonNavigatorAdapter {
         @Override
