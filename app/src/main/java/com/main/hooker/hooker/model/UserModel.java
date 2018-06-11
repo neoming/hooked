@@ -39,10 +39,13 @@ public class UserModel {
     }
 
     public static FormBody.Builder getAuthBodyBuilder() {
-        State state = MainApplication.getState();
+//        State state = MainApplication.getState();
+//        return new FormBody.Builder()
+//                .add("uid", String.valueOf(state.userGetUid()))
+//                .add("api_token", state.userGetApiToken());
         return new FormBody.Builder()
-                .add("uid", String.valueOf(state.userGetUid()))
-                .add("api_token", state.userGetApiToken());
+                .add("uid", String.valueOf(7))
+                .add("api_token", "bvCeNnMHBLqzHMozeeyEghNd");
     }
 
     public static User getMe() throws ApiFailException {
