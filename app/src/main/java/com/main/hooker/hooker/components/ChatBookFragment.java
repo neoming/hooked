@@ -2,6 +2,7 @@ package com.main.hooker.hooker.components;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -40,6 +41,7 @@ public class ChatBookFragment extends Fragment {
     private int mPage = 0;
     private int mNowItem = -1;
     private boolean mHasMore = true;
+    private boolean mHasFooter = false;
     private BubbleAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
@@ -85,8 +87,10 @@ public class ChatBookFragment extends Fragment {
     }
 
     public void getNewBubble(){
-        if(!mHasMore){
-            Toast.makeText(getContext(), "There is no more", Toast.LENGTH_LONG).show();
+        if(!mHasMore && !mHasFooter){
+            // Toast.makeText(getContext(), "There is no more", Toast.LENGTH_LONG).show();
+            mAdapter.addFooterView(getFooterView());
+            mHasFooter = true;
         }
         mNowItem += 1;
         if(bubbleCache.size() > mNowItem){
@@ -100,6 +104,20 @@ public class ChatBookFragment extends Fragment {
                 }
             });
         }
+    }
+
+    private View getFooterView() {
+        View footer = getLayoutInflater().inflate(R.layout.footer_rate, (ViewGroup) mRecyclerView.getParent(), false);
+        footer.findViewById(R.id.comment).setOnClickListener((v) ->{
+            getActivity()
+                    .getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_bottom, R.anim.slide_in_top, R.anim.slide_out_top)
+                    .add(R.id.fragment, new CommentFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
+        return footer;
     }
 
     public void load(){
@@ -124,14 +142,23 @@ public class ChatBookFragment extends Fragment {
                     if(!backward) {
                         if(list==null || list.size()==0){
                             mHasMore = false;
-                            Toast.makeText(getContext(), "There is no more", Toast.LENGTH_LONG).show();
+                            // Toast.makeText(getContext(), "There is no more", Toast.LENGTH_LONG).show();
+                            if (!mHasFooter) {
+                                mAdapter.addFooterView(getFooterView());
+                                mHasFooter = true;
+                            }
+
                             return;
                         }
                         bubbleCache.addAll(list);
                     }else {
                         if(list==null || list.size()==0){
                             mHasMore = false;
-                            Toast.makeText(getContext(), "There is no more", Toast.LENGTH_LONG).show();
+                            // Toast.makeText(getContext(), "There is no more", Toast.LENGTH_LONG).show();
+                            if (!mHasFooter) {
+                                mAdapter.addFooterView(getFooterView());
+                                mHasFooter = true;
+                            }
                             return;
                         }
                         bubbleCache.addAll(0, list);

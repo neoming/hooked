@@ -8,21 +8,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.main.hooker.hooker.R;
-public class RateFragment extends Fragment {
-    public RateFragment() {
+public class CommentFragment extends Fragment {
+    public CommentFragment() {
         // Required empty public constructor
     }
 
 
     // TODO: Rename and change types and number of parameters
-    public static RateFragment newInstance(String param1, String param2) {
-        RateFragment fragment = new RateFragment();
+    public static CommentFragment newInstance(String param1, String param2) {
+        CommentFragment fragment = new CommentFragment();
         return fragment;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_rate, container, false);
+        return inflater.inflate(R.layout.fragment_comment, container, false);
     }
 
 }

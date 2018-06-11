@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Happiness"
+        android:textSize="20sp"
+        android:layout_marginTop="4dp"
+        android:textColor="@android:color/primary_text_light"
+        android:layout_centerHorizontal="true"/>
+
+    <RelativeLayout
+        android:layout_below="@id/title"
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_height="80dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+        <LinearLayout
+            android:id="@+id/love"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Loved"
+                android:textSize="16sp"
+                android:textColor="@android:color/secondary_text_light"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12"
+                android:textSize="16sp"
+                android:textColor="@android:color/secondary_text_light"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/comment"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comments"
+                android:textSize="16sp"
+                android:textColor="@android:color/secondary_text_light"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12"
+                android:textSize="16sp"
+                android:textColor="@android:color/secondary_text_light"/>
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>
