@@ -21,6 +21,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ import com.main.hooker.hooker.utils.Tool;
 import com.main.hooker.hooker.utils.http.ApiFailException;
 import com.main.hooker.hooker.views.ContentActivity;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -47,6 +49,8 @@ public class PageFragment extends Fragment {
     private int mPage = 1;
     private View appbar;
     private View detail;
+    private RecyclerView mRecView;
+    private List<BookWrapper> mBookWrappers;
     private SmartRefreshLayout refreshLayout;
 
     public static PageFragment newInstance(int index) {
@@ -82,11 +86,11 @@ public class PageFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        RecyclerView recyclerView = view.findViewById(R.id.recycler);
+        mRecView = view.findViewById(R.id.recycler);
         refreshLayout = view.findViewById(R.id.refresh);
-
+        refreshLayout.setOnRefreshListener(this::refresh);
         adapter = new CoverAdapter(R.layout.item_book);
-        adapter.setOnLoadMoreListener(this::loadMore, recyclerView);
+        adapter.setOnLoadMoreListener(this::loadMore, mRecView);
         load();
         adapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
         adapter.setLoadMoreView(new CustomLoadMore());
@@ -106,17 +110,17 @@ public class PageFragment extends Fragment {
                 startActivity(intent, options.toBundle());
             }, 300);
         });
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        mRecView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        mRecView.setAdapter(adapter);
+        mRecView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
     }
 
 
     private void load() {
-        load(false);
+        load(false, null);
     }
 
-    private void load(boolean more) {
+    private void load(boolean more, Runnable callback) {
         if (more) {
             mPage += 1;
         }
@@ -130,20 +134,29 @@ public class PageFragment extends Fragment {
                 getActivity().runOnUiThread(() -> {
                     if (more) {
                         if (list != null && list.size() > 0) {
-                            adapter.addData(bookWrappers);
+                            mBookWrappers.addAll(bookWrappers);
                             adapter.loadMoreComplete();
                         } else {
                             //Toast.makeText(getContext(), "There is no more", Toast.LENGTH_LONG).show();
                             adapter.loadMoreEnd(true);
                         }
                     } else {
-                        adapter.setNewData(bookWrappers);
+                        mBookWrappers = bookWrappers;
+                        adapter.setNewData(mBookWrappers);
+                    }
+                    if(callback != null){
+                        callback.run();
                     }
                 });
             } catch (ApiFailException e) {
-                if (more) {
-                    adapter.loadMoreFail();
-                }
+                getActivity().runOnUiThread(()->{
+                    if (more) {
+                        adapter.loadMoreFail();
+                    }
+                    if(callback != null){
+                        callback.run();
+                    }
+                });
                 Log.e("api", "load: "+e.getApiResult().msg);
               //  Toast.makeText(getContext(), "Error:" + e.getApiResult().msg, Toast.LENGTH_LONG).show();
             }
@@ -152,7 +165,15 @@ public class PageFragment extends Fragment {
 
 
     private void loadMore() {
-        load(true);
+        load(true, null);
+    }
+
+    private void refresh(RefreshLayout layout){
+        mBookWrappers.clear();
+        adapter.notifyDataSetChanged();
+        mPage = 1;
+        load(false, layout::finishRefresh);
+
     }
 
     private static class CoverAdapter extends BaseQuickAdapter<BookWrapper, BaseViewHolder> {
