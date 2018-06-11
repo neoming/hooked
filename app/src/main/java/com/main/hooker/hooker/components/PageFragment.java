@@ -6,23 +6,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.transition.Fade;
-import android.transition.Slide;
-import android.support.transition.TransitionManager;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -35,6 +28,7 @@ import com.main.hooker.hooker.utils.Tool;
 import com.main.hooker.hooker.utils.http.ApiFailException;
 import com.main.hooker.hooker.views.ContentActivity;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -47,6 +41,8 @@ public class PageFragment extends Fragment {
     private int mPage = 1;
     private View appbar;
     private View detail;
+    private RecyclerView mRecView;
+    private List<BookWrapper> mBookWrappers;
     private SmartRefreshLayout refreshLayout;
 
     public static PageFragment newInstance(int index) {
@@ -82,11 +78,11 @@ public class PageFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        RecyclerView recyclerView = view.findViewById(R.id.recycler);
+        mRecView = view.findViewById(R.id.recycler);
         refreshLayout = view.findViewById(R.id.refresh);
-
+        refreshLayout.setOnRefreshListener(this::refresh);
         adapter = new CoverAdapter(R.layout.item_book);
-        adapter.setOnLoadMoreListener(this::loadMore, recyclerView);
+        adapter.setOnLoadMoreListener(this::loadMore, mRecView);
         load();
         adapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
         adapter.setLoadMoreView(new CustomLoadMore());
@@ -106,17 +102,17 @@ public class PageFragment extends Fragment {
                 startActivity(intent, options.toBundle());
             }, 300);
         });
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        mRecView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        mRecView.setAdapter(adapter);
+        mRecView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
     }
 
 
     private void load() {
-        load(false);
+        load(false, null);
     }
 
-    private void load(boolean more) {
+    private void load(boolean more, Runnable callback) {
         if (more) {
             mPage += 1;
         }
@@ -130,29 +126,46 @@ public class PageFragment extends Fragment {
                 getActivity().runOnUiThread(() -> {
                     if (more) {
                         if (list != null && list.size() > 0) {
-                            adapter.addData(bookWrappers);
+                            mBookWrappers.addAll(bookWrappers);
                             adapter.loadMoreComplete();
                         } else {
                             //Toast.makeText(getContext(), "There is no more", Toast.LENGTH_LONG).show();
                             adapter.loadMoreEnd(true);
                         }
                     } else {
-                        adapter.setNewData(bookWrappers);
+                        mBookWrappers = bookWrappers;
+                        adapter.setNewData(mBookWrappers);
+                    }
+                    if (callback != null) {
+                        callback.run();
                     }
                 });
             } catch (ApiFailException e) {
-                if (more) {
-                    adapter.loadMoreFail();
-                }
-                Log.e("api", "load: "+e.getApiResult().msg);
-              //  Toast.makeText(getContext(), "Error:" + e.getApiResult().msg, Toast.LENGTH_LONG).show();
+                getActivity().runOnUiThread(() -> {
+                    if (more) {
+                        adapter.loadMoreFail();
+                    }
+                    if (callback != null) {
+                        callback.run();
+                    }
+                });
+                Log.e("api", "load: " + e.getApiResult().msg);
+                //  Toast.makeText(getContext(), "Error:" + e.getApiResult().msg, Toast.LENGTH_LONG).show();
             }
         }).start();
     }
 
 
     private void loadMore() {
-        load(true);
+        load(true, null);
+    }
+
+    private void refresh(RefreshLayout layout) {
+        mBookWrappers.clear();
+        adapter.notifyDataSetChanged();
+        mPage = 1;
+        load(false, layout::finishRefresh);
+
     }
 
     private static class CoverAdapter extends BaseQuickAdapter<BookWrapper, BaseViewHolder> {

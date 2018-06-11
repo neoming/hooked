@@ -41,5 +41,12 @@ public class BookModel {
         return gson.fromJson(result.data, bubbleListType);
     }
 
+    public static ArrayList<Book> getSearchList(String keyWords,int page) throws ApiFailException{
+        ApiResult result =Http.get("book/searchBook" + "?key_words=" + keyWords+"&page="+String.valueOf(page));
+        Gson gson=Gsoner.get();
+        Type bookListType = new TypeToken<ArrayList<Book>>() {
+        }.getType();
+        return gson.fromJson(result.data, bookListType);
+    }
 
 }
