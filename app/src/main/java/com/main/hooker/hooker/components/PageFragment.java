@@ -119,6 +119,9 @@ public class PageFragment extends Fragment {
         new Thread(() -> {
             try {
                 ArrayList<Book> list = BookModel.getList(Tool.indexToType(mType), mPage);
+                if(list == null){
+                    throw new ApiFailException();
+                }
                 List<BookWrapper> bookWrappers = new ArrayList<>();
                 for (Book book : list) {
                     bookWrappers.add(new BookWrapper(book));
@@ -161,7 +164,8 @@ public class PageFragment extends Fragment {
     }
 
     private void refresh(RefreshLayout layout) {
-        mBookWrappers.clear();
+        if(mBookWrappers != null)
+            mBookWrappers.clear();
         adapter.notifyDataSetChanged();
         mPage = 1;
         load(false, layout::finishRefresh);

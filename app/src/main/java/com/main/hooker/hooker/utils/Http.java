@@ -43,7 +43,7 @@ public class Http {
 
     private static ApiResult parseResponse(Response response) throws ApiFailException {
         try {
-            String text = response.body() != null ? response.body().string() : null;
+            String text = response.body() == null ? null : response.body().string();
             Gson json = Gsoner.get();
             ApiResult result = json.fromJson(text, ApiResult.class);
             if (result == null) {

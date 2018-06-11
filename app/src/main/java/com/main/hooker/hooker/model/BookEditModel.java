@@ -27,10 +27,9 @@ public class BookEditModel {
                 .add("book_id", Integer.toString(book_id))
                 .build();
         ApiResult result = Http.post("book/character/characters", body);
-        Gson gson = Gsoner.get();
         Type characterListType = new TypeToken<ArrayList<Character>>() {
         }.getType();
-        return gson.fromJson(result.data, characterListType);
+        return Gsoner.fromJson(result.data, characterListType);
     }
 
     public static Character addCharacter(int book_id, String name, String avatar) throws ApiFailException {
@@ -40,8 +39,7 @@ public class BookEditModel {
                 .add("avatar", avatar)
                 .build();
         ApiResult result = Http.post("book/character/add", body);
-        Gson gson = Gsoner.get();
-        return gson.fromJson(result.data, Character.class);
+        return Gsoner.fromJson(result.data, Character.class);
     }
 
     public static Character editCharacter(int character_id, String name, String avatar) throws ApiFailException {
@@ -51,8 +49,7 @@ public class BookEditModel {
                 .add("character_id", Integer.toString(character_id))
                 .build();
         ApiResult result = Http.post("book/character/edit", body);
-        Gson gson = Gsoner.get();
-        return gson.fromJson(result.data, Character.class);
+        return Gsoner.fromJson(result.data, Character.class);
     }
 
     public static void removeCharacter(int character_id) throws ApiFailException {
@@ -72,8 +69,7 @@ public class BookEditModel {
                 .add("content", content)
                 .build();
         ApiResult result = Http.post("book/item/add", body);
-        Gson gson = Gsoner.get();
-        return gson.fromJson(result.data, Bubble.class);
+        return Gsoner.fromJson(result.data, Bubble.class);
     }
 
     public static Bubble bubbleEdit(int type, int position, int character_id, String content, int item_id) throws ApiFailException {
@@ -85,8 +81,7 @@ public class BookEditModel {
                 .add("content", content)
                 .build();
         ApiResult result = Http.post("book/item/edit", body);
-        Gson gson = Gsoner.get();
-        return gson.fromJson(result.data, Bubble.class);
+        return Gsoner.fromJson(result.data, Bubble.class);
     }
 
     public static void bubbleRemove(int id) throws ApiFailException {

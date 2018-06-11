@@ -47,8 +47,7 @@ public class UserModel {
 
     public static User getMe() throws ApiFailException {
         ApiResult result = Http.post("user/info", getAuthBodyBuilder().build());
-        Gson gson = Gsoner.get();
-        return gson.fromJson(result.data, User.class);
+        return Gsoner.fromJson(result.data, User.class);
     }
 
     public static void register(String username, String password, String phone) throws ApiFailException {
@@ -68,6 +67,9 @@ public class UserModel {
                 .add("password", password)
                 .build();
         ApiResult result = Http.post("user/login", body);
+        if(result.data == null){
+            throw new ApiFailException();
+        }
         JsonObject data = result.data.getAsJsonObject();
         if (data == null || data.getAsJsonPrimitive("uid") == null || data.getAsJsonPrimitive("api_token") == null)
             throw new ApiFailException();
@@ -83,8 +85,7 @@ public class UserModel {
 
     public static User getProfile(int uid) throws ApiFailException {
         ApiResult result = Http.post("user/profile/" + uid, getAuthBodyBuilder().build());
-        Gson gson = Gsoner.get();
-        return gson.fromJson(result.data, User.class);
+        return Gsoner.fromJson(result.data, User.class);
     }
 
     public static void follow(int to_uid) throws ApiFailException {
@@ -105,18 +106,16 @@ public class UserModel {
 
     public static ArrayList<Follow> getFollowings(int page) throws ApiFailException {
         ApiResult result = Http.post("user/get_followings?page=" + page, getAuthBodyBuilder().build());
-        Gson gson = Gsoner.get();
         Type followListType = new TypeToken<ArrayList<Follow>>() {
         }.getType();
-        return gson.fromJson(result.data, followListType);
+        return Gsoner.fromJson(result.data, followListType);
     }
 
     public static ArrayList<Follow> getFollowedBy(int page) throws ApiFailException {
         ApiResult result = Http.post("user/get_followed_bys?page=" + page, getAuthBodyBuilder().build());
-        Gson gson = Gsoner.get();
         Type followListType = new TypeToken<ArrayList<Follow>>() {
         }.getType();
-        return gson.fromJson(result.data, followListType);
+        return Gsoner.fromJson(result.data, followListType);
     }
 
     public static void favor(int book_id) throws ApiFailException {
@@ -141,6 +140,9 @@ public class UserModel {
                         add("book_id", String.valueOf(book_id))
                         .build()
         );
+        if(result.data == null){
+            throw new ApiFailException();
+        }
         JsonObject data = result.data.getAsJsonObject();
         if (data == null || data.getAsJsonPrimitive("is_favored") == null)
             throw new ApiFailException();
@@ -150,10 +152,9 @@ public class UserModel {
 
     public static ArrayList<Favor> getFavorings(int page) throws ApiFailException {
         ApiResult result = Http.post("user/get_favorings?page=" + page, getAuthBodyBuilder().build());
-        Gson gson = Gsoner.get();
         Type favorListType = new TypeToken<ArrayList<Favor>>() {
         }.getType();
-        return gson.fromJson(result.data, favorListType);
+        return Gsoner.fromJson(result.data, favorListType);
     }
 
 }

@@ -23,7 +23,6 @@ public class BookCommentModel {
                 .add("comment", content)
                 .build();
         ApiResult result = Http.post("comment/comment", body);
-        //return gson.fromJson(result.data,);
     }
 
     public static void editComment(int book_id, double score, String content) throws ApiFailException {
@@ -48,8 +47,7 @@ public class BookCommentModel {
                 .add("book_id", Integer.toString(book_id))
                 .build();
         ApiResult result = Http.post("comment/get_comment", body);
-        Gson gson = Gsoner.get();
-        return gson.fromJson(result.data, Comment.class);
+        return Gsoner.fromJson(result.data, Comment.class);
     }
 
     public static ArrayList<Comment> getCommentList(int page) throws ApiFailException {
@@ -57,9 +55,8 @@ public class BookCommentModel {
                 .add("page", Integer.toString(page))
                 .build();
         ApiResult result = Http.post("comment/get_my_comment_list", body);
-        Gson gson = Gsoner.get();
         Type commentList = new TypeToken<ArrayList<Comment>>() {
         }.getType();
-        return gson.fromJson(result.data, commentList);
+        return Gsoner.fromJson(result.data, commentList);
     }
 }
