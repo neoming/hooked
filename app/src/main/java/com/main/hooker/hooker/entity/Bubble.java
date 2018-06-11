@@ -11,4 +11,13 @@ public class Bubble {
     public String create_time;
     public String update_time;
     public Character character;
+
+    @Override
+    public String toString() {
+        return "Bubble{" +
+                "position=" + position +
+                ", character_id=" + character_id +
+                ", content='" + content + '\'' +
+                '}';
+    }
 }

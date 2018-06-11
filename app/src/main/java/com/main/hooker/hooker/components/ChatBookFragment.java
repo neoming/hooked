@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.main.hooker.hooker.R;
+import com.main.hooker.hooker.adapter.BubbleAdapter;
 import com.main.hooker.hooker.entity.Book;
 import com.main.hooker.hooker.entity.BookWrapper;
 import com.main.hooker.hooker.entity.Bubble;
@@ -146,36 +147,4 @@ public class ChatBookFragment extends Fragment {
             }
         }).start();
     }
-
-
-    private static class BubbleAdapter extends BaseQuickAdapter<Bubble, BaseViewHolder> {
-        public BubbleAdapter(int layoutResId, @Nullable List<Bubble> data) {
-            super(layoutResId, data);
-        }
-
-        @Override
-        protected void convert(BaseViewHolder helper, Bubble item) {
-            Log.d(TAG, "convert: position = " + item.position);
-            if (item.position == 0) {
-                helper.setText(R.id.character, item.character == null ? "unknown" : item.character.name);
-                helper.setText(R.id.content, item.content);
-                helper.setGone(R.id.card, true);
-                helper.setGone(R.id.card2, false);
-                helper.setGone(R.id.text, false);
-            } else if (item.position == 1){
-                helper.setText(R.id.character2, item.character == null ? "unknown" : item.character.name);
-                helper.setText(R.id.content2, item.content);
-                helper.setGone(R.id.card2, true);
-                helper.setGone(R.id.card, false);
-                helper.setGone(R.id.text, false);
-            } else {
-                helper.setGone(R.id.text, true);
-                helper.setText(R.id.text, item.content);
-                helper.setGone(R.id.card2, false);
-                helper.setGone(R.id.card, false);
-            }
-        }
-    }
-
-
 }

@@ -53,7 +53,7 @@ public class State {
         try {
             IDAO<MetaItem> dao = getMetaDao();
             List<MetaItem> list = dao.findByCondition("key = '" + key + "'");
-            if (list == null || list.size() <= 0) {
+            if (list != null || list.size() <= 0) {
                 MetaItem item = new MetaItem(key, value);
                 dao.save(item);
             } else {
