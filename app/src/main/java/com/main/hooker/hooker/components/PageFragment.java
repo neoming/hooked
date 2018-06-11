@@ -6,24 +6,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.transition.Fade;
-import android.transition.Slide;
-import android.support.transition.TransitionManager;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -144,21 +136,21 @@ public class PageFragment extends Fragment {
                         mBookWrappers = bookWrappers;
                         adapter.setNewData(mBookWrappers);
                     }
-                    if(callback != null){
+                    if (callback != null) {
                         callback.run();
                     }
                 });
             } catch (ApiFailException e) {
-                getActivity().runOnUiThread(()->{
+                getActivity().runOnUiThread(() -> {
                     if (more) {
                         adapter.loadMoreFail();
                     }
-                    if(callback != null){
+                    if (callback != null) {
                         callback.run();
                     }
                 });
-                Log.e("api", "load: "+e.getApiResult().msg);
-              //  Toast.makeText(getContext(), "Error:" + e.getApiResult().msg, Toast.LENGTH_LONG).show();
+                Log.e("api", "load: " + e.getApiResult().msg);
+                //  Toast.makeText(getContext(), "Error:" + e.getApiResult().msg, Toast.LENGTH_LONG).show();
             }
         }).start();
     }
@@ -168,7 +160,7 @@ public class PageFragment extends Fragment {
         load(true, null);
     }
 
-    private void refresh(RefreshLayout layout){
+    private void refresh(RefreshLayout layout) {
         mBookWrappers.clear();
         adapter.notifyDataSetChanged();
         mPage = 1;
