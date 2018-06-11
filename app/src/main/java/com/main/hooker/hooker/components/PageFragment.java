@@ -81,6 +81,7 @@ public class PageFragment extends Fragment {
         mRecView = view.findViewById(R.id.recycler);
         refreshLayout = view.findViewById(R.id.refresh);
         refreshLayout.setOnRefreshListener(this::refresh);
+        refreshLayout.setEnableLoadMore(false);
         adapter = new CoverAdapter(R.layout.item_book);
         adapter.setOnLoadMoreListener(this::loadMore, mRecView);
         load();
