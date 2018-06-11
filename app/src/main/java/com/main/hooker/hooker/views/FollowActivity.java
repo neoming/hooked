@@ -1,5 +1,6 @@
 package com.main.hooker.hooker.views;
 
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -13,8 +14,11 @@ import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.main.hooker.hooker.MainApplication;
 import com.main.hooker.hooker.R;
 import com.main.hooker.hooker.adapter.FollowAdapter;
+import com.main.hooker.hooker.components.LoginFragment;
+import com.main.hooker.hooker.components.ProfileDetailFragment;
 import com.main.hooker.hooker.entity.Favor;
 import com.main.hooker.hooker.entity.Follow;
 import com.main.hooker.hooker.entity.User;
@@ -33,21 +37,32 @@ public class FollowActivity extends AppCompatActivity {
     private boolean mHasMore = true;
     private int mPage = 0;
     private boolean isLoading = false;
+    private User mUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_follow);
         refreshLayout = findViewById(R.id.refresh);
         recyclerView = findViewById(R.id.recycler);
-
+        mUser = getIntent().getExtras().getParcelable("user");
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new FollowAdapter(R.layout.item_follow_user, mFollowings);
         initRefresh();
         initLoadMore();
+        adapter.setOnItemClickListener((adapter, view, position)->{
+            User user = (User) adapter.getItem(position);
+            Intent intent = new Intent(this, ProfileActivity.class);
+            intent.putExtra("user", user);
+            startActivity(intent);
+        });
         //View header = View.inflate(this, R.layout.header_add_follow, null);
         //adapter.addHeaderView(header);
         recyclerView.setAdapter(adapter);
         load();
+    }
+
+    public boolean isUserSelf(){
+        return mUser.id == MainApplication.getState().userGetUid();
     }
 
     private void initLoadMore() {
@@ -88,12 +103,11 @@ public class FollowActivity extends AppCompatActivity {
         mHasMore = true;
         new Thread(()->{
             try {
-                ArrayList<Follow> list = UserModel.getFollowings(mPage);
+                ArrayList<Follow> list = UserModel.getFollowings(mUser.id, mPage);
                 if(list == null)
                     throw new ApiFailException();
                 ArrayList<User> userList = new ArrayList<>();
                 for (Follow follow : list){
-                    Log.e("test", follow.to_user != null ? follow.to_user.username : "no_to_user!!!");
                     if(follow.to_user != null)
                         userList.add(follow.to_user);
                 }

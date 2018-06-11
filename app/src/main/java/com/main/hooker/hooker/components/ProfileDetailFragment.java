@@ -21,10 +21,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.main.hooker.hooker.MainActivity;
+import com.main.hooker.hooker.MainApplication;
 import com.main.hooker.hooker.R;
 import com.main.hooker.hooker.adapter.CollectionAdapter;
 import com.main.hooker.hooker.entity.User;
 import com.main.hooker.hooker.model.UserModel;
+import com.main.hooker.hooker.utils.State;
 import com.main.hooker.hooker.utils.http.ApiFailException;
 import com.main.hooker.hooker.views.FollowActivity;
 import com.main.hooker.hooker.views.FollowerActivity;
@@ -35,7 +37,7 @@ import java.util.ArrayList;
 
 
 public class ProfileDetailFragment extends Fragment {
-    private User user;
+    private User mUser;
     private Context mContext;
     private View mHeaderView;
     private CollectionAdapter mColAdapter;
@@ -48,7 +50,7 @@ public class ProfileDetailFragment extends Fragment {
 
     public static ProfileDetailFragment newInstance(User user) {
         ProfileDetailFragment fragment = new ProfileDetailFragment();
-        fragment.user = user;
+        fragment.mUser = user;
         fragment.setEnterTransition(new Fade(Fade.IN));
         return fragment;
     }
@@ -92,7 +94,11 @@ public class ProfileDetailFragment extends Fragment {
         recyclerView.setAdapter(mColAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
         mHeaderView.findViewById(R.id.follower).setOnClickListener((v -> startActivity(new Intent(mContext, FollowerActivity.class))));
-        mHeaderView.findViewById(R.id.following).setOnClickListener((v -> startActivity(new Intent(mContext, FollowActivity.class))));
+        mHeaderView.findViewById(R.id.following).setOnClickListener(v -> {
+                Intent intent = new Intent(mContext, FollowActivity.class);
+                intent.putExtra("user", mUser);
+                startActivity(intent);
+            });
         mHeaderView.findViewById(R.id.works).setOnClickListener((v -> startActivity(new Intent(mContext, WorkActivity.class))));
         view.findViewById(R.id.icon_back).setOnClickListener(v -> ((Activity) mContext).finish());
         load();
@@ -101,10 +107,12 @@ public class ProfileDetailFragment extends Fragment {
     public void load(){
         new Thread(()->{
             try {
-                User user = UserModel.getMe();
-                if(user != null){
+                if(mUser == null){
+                    mUser = UserModel.getMe();
+                }
+                if(mUser != null){
                     getActivity().runOnUiThread(()->{
-                        updateInfo(user);
+                        updateInfo(mUser);
                     });
                 }
             } catch (ApiFailException e) {
@@ -114,6 +122,14 @@ public class ProfileDetailFragment extends Fragment {
     }
 
     public void updateInfo(User user){
+        if(getView()!=null){
+            State state = MainApplication.getState();
+            TextView navTitle = getView().findViewById(R.id.navbar_title);
+            if(state.userGetUid() == user.id)
+                navTitle.setText("My Profile");
+            else
+                navTitle.setText(user.username + "'s Profile");
+        }
         TextView tvUsername = mHeaderView.findViewById(R.id.profile_username);
         TextView tvFullname = mHeaderView.findViewById(R.id.profile_full_name);
         TextView tvMyWorks = mHeaderView.findViewById(R.id.profile_works_count);

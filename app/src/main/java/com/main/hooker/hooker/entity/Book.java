@@ -28,8 +28,7 @@ public class Book implements Parcelable{
         @Override
         public Book createFromParcel(Parcel in) {
             String jsonText = in.readString();
-            Gson gson = Gsoner.get();
-            return gson.fromJson(jsonText, Book.class);
+            return Gsoner.fromJson(jsonText, Book.class);
         }
 
         @Override
@@ -45,8 +44,7 @@ public class Book implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        Gson gson = Gsoner.get();
-        String jsonText = gson.toJson(this);
+        String jsonText = Gsoner.toJson(this);
         dest.writeString(jsonText);
     }
 }

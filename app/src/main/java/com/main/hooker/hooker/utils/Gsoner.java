@@ -24,7 +24,7 @@ public class Gsoner {
         return mGson;
     }
 
-    public static <T> T fromJson(String json, Class<T> classOfT) throws ApiFailException {
+    public static <T> T fromJson(String json, Class<T> classOfT){
         return get().fromJson(json, classOfT);
     }
 
@@ -38,5 +38,9 @@ public class Gsoner {
 
     public static <T> T fromJson(JsonElement json, Type typeOfT) {
         return get().fromJson(json, typeOfT);
+    }
+
+    public static String toJson(Object src){
+        return get().toJson(src);
     }
 }

@@ -104,15 +104,15 @@ public class UserModel {
         );
     }
 
-    public static ArrayList<Follow> getFollowings(int page) throws ApiFailException {
-        ApiResult result = Http.post("user/get_followings?page=" + page, getAuthBodyBuilder().build());
+    public static ArrayList<Follow> getFollowings(int userId, int page) throws ApiFailException {
+        ApiResult result = Http.get("user/get_followings?page=" + page + "&" + "user_id=" + userId);
         Type followListType = new TypeToken<ArrayList<Follow>>() {
         }.getType();
         return Gsoner.fromJson(result.data, followListType);
     }
 
-    public static ArrayList<Follow> getFollowedBy(int page) throws ApiFailException {
-        ApiResult result = Http.post("user/get_followed_bys?page=" + page, getAuthBodyBuilder().build());
+    public static ArrayList<Follow> getFollowedBy(int userId, int page) throws ApiFailException {
+        ApiResult result = Http.get("user/get_followed_bys?page=" + page + "&" + "user_id=" + userId);
         Type followListType = new TypeToken<ArrayList<Follow>>() {
         }.getType();
         return Gsoner.fromJson(result.data, followListType);
@@ -150,8 +150,8 @@ public class UserModel {
         return is_favored == 1;
     }
 
-    public static ArrayList<Favor> getFavorings(int page) throws ApiFailException {
-        ApiResult result = Http.post("user/get_favorings?page=" + page, getAuthBodyBuilder().build());
+    public static ArrayList<Favor> getFavorings(int userId, int page) throws ApiFailException {
+        ApiResult result = Http.get("user/get_favorings?page=" + page + "&" + "user_id=" + userId);
         Type favorListType = new TypeToken<ArrayList<Favor>>() {
         }.getType();
         return Gsoner.fromJson(result.data, favorListType);

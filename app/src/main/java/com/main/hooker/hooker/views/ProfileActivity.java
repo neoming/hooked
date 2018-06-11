@@ -2,6 +2,7 @@ package com.main.hooker.hooker.views;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.main.hooker.hooker.R;
@@ -17,6 +18,13 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        if(getIntent().getExtras() != null && getIntent().getExtras().getParcelable("user") != null){
+            User user = getIntent().getExtras().getParcelable("user");
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment, ProfileDetailFragment.newInstance(user))
+                    .commit();
+            return;
+        }
         new Thread(() -> {
             try {
                 getSupportFragmentManager().beginTransaction()
