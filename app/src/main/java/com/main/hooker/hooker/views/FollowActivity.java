@@ -10,6 +10,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -58,7 +60,20 @@ public class FollowActivity extends AppCompatActivity {
         //View header = View.inflate(this, R.layout.header_add_follow, null);
         //adapter.addHeaderView(header);
         recyclerView.setAdapter(adapter);
+        initNav();
         load();
+    }
+
+    private void initNav() {
+        TextView navTitle = findViewById(R.id.navbar_title);
+        ImageView addBtn = findViewById(R.id.add_follow_btn);
+        if(isUserSelf()){
+            navTitle.setText("Following");
+            addBtn.setVisibility(View.VISIBLE);
+        }else{
+            navTitle.setText(mUser.username + "'s Following");
+            addBtn.setVisibility(View.INVISIBLE);
+        }
     }
 
     public boolean isUserSelf(){

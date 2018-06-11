@@ -25,6 +25,7 @@
                 android:onClick="finish" />
 
             <TextView
+                android:id="@+id/navbar_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -33,12 +34,13 @@
                 android:textSize="16sp" />
 
             <ImageView
+                android:id="@+id/add_follow_btn"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:src="@drawable/ic_ali_add_friend"
-                android:tint="@android:color/white"/>
+                android:tint="@android:color/white" />
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
     <android.support.v4.widget.SwipeRefreshLayout
