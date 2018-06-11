@@ -50,6 +50,7 @@ public class CoverFragment extends Fragment {
 
         TextView tv = view.findViewById(R.id.title);
         Picasso.get().load(book.cover_img).into((ImageView) view.findViewById(R.id.cover));
+        Picasso.get().load(R.drawable.main_icon).into((ImageView) view.findViewById(R.id.cover_logo));
         tv.setText(book.title);
         TextView tvAuthor = view.findViewById(R.id.author);
         tvAuthor.setText(book.author == null ? "unknown" : book.author.username);

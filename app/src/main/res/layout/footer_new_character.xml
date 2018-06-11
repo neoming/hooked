@@ -25,4 +25,5 @@
         android:layout_toEndOf="@id/wrapper"
         android:layout_marginStart="16dp"
         android:layout_centerVertical="true"/>
+
 </RelativeLayout>

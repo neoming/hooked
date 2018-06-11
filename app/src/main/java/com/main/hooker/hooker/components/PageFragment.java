@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.transition.Fade;
 import android.transition.Slide;
 import android.support.transition.TransitionManager;
@@ -33,6 +34,7 @@ import com.main.hooker.hooker.model.BookModel;
 import com.main.hooker.hooker.utils.Tool;
 import com.main.hooker.hooker.utils.http.ApiFailException;
 import com.main.hooker.hooker.views.ContentActivity;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -45,6 +47,7 @@ public class PageFragment extends Fragment {
     private int mPage = 1;
     private View appbar;
     private View detail;
+    private SmartRefreshLayout refreshLayout;
 
     public static PageFragment newInstance(int index) {
         PageFragment fragment = new PageFragment();
@@ -80,6 +83,8 @@ public class PageFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView recyclerView = view.findViewById(R.id.recycler);
+        refreshLayout = view.findViewById(R.id.refresh);
+
         adapter = new CoverAdapter(R.layout.item_book);
         adapter.setOnLoadMoreListener(this::loadMore, recyclerView);
         load();
