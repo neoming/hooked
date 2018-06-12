@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.main.hooker.hooker.R;
 import com.main.hooker.hooker.entity.Book;
+import com.main.hooker.hooker.model.BookModel;
 import com.main.hooker.hooker.model.UserModel;
 import com.main.hooker.hooker.utils.http.ApiFailException;
 import com.squareup.picasso.Picasso;
@@ -22,7 +23,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CoverFragment extends Fragment {
 
-    private Book book;
+    private Book mBook;
 
     private ChatBookFragment chatBookFragment;
 
@@ -31,7 +32,7 @@ public class CoverFragment extends Fragment {
 
     public static CoverFragment newInstance(Book book) {
         CoverFragment fragment = new CoverFragment();
-        fragment.book = book;
+        fragment.mBook = book;
         return fragment;
     }
 
@@ -45,22 +46,11 @@ public class CoverFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView tv = view.findViewById(R.id.title);
-        Picasso.get().load(book.cover_img).into((ImageView) view.findViewById(R.id.cover));
-        Picasso.get().load(R.drawable.main_icon).into((ImageView) view.findViewById(R.id.cover_logo));
-        tv.setText(book.title);
-        TextView tvAuthor = view.findViewById(R.id.author);
-        tvAuthor.setText(book.author == null ? "unknown" : book.author.username);
-        TextView favoredCount = view.findViewById(R.id.loved);
-        favoredCount.setText(String.valueOf(book.favor_count));
-        TextView desc = view.findViewById(R.id.description);
-        desc.setText(book.desc);
-
-        chatBookFragment = ChatBookFragment.newInstance(book);
+        chatBookFragment = ChatBookFragment.newInstance(mBook);
         detail = view.findViewById(R.id.detail);
         appbar = view.findViewById(R.id.appbar);
 
-
+        freshStateView();
 
         CircleImageView imageView = view.findViewById(R.id.cover_logo);
         imageView.setOnClickListener((View image)->{
@@ -80,7 +70,9 @@ public class CoverFragment extends Fragment {
                     .addToBackStack(null)
                     .commit();
         });
+        freshState();
         checkIsFavored();
+        addViewCount();
     }
 
     private void setFavorIcon(boolean lit){
@@ -92,15 +84,55 @@ public class CoverFragment extends Fragment {
         }
     }
 
+    private void freshState(){
+        new Thread(()->{
+            try {
+                mBook = BookModel.getOneBook(mBook.id);
+                getActivity().runOnUiThread(this::freshStateView);
+            } catch (ApiFailException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private void freshStateView(){
+        if(getView() != null){
+            View view= getView();
+            TextView tv = view.findViewById(R.id.title);
+            Picasso.get().load(mBook.cover_img).into((ImageView) view.findViewById(R.id.cover));
+            Picasso.get().load(R.drawable.main_icon).into((ImageView) view.findViewById(R.id.cover_logo));
+            tv.setText(mBook.title);
+            TextView tvAuthor = view.findViewById(R.id.author);
+            tvAuthor.setText(mBook.author == null ? "unknown" : mBook.author.username);
+            TextView viewCount = view.findViewById(R.id.viewNum);
+            viewCount.setText(String.valueOf(mBook.view_count));
+            TextView favoredCount = view.findViewById(R.id.loved);
+            favoredCount.setText(String.valueOf(mBook.favor_count));
+            TextView desc = view.findViewById(R.id.description);
+            desc.setText(mBook.desc);
+        }
+
+    }
+
     private void checkIsFavored(){
         new Thread(()->{
             try {
                 if (UserModel.hasLogin()) {
-                    boolean isFavored = UserModel.isFavored(book.id);
+                    boolean isFavored = UserModel.isFavored(mBook.id);
                     getActivity().runOnUiThread(()->{
                         setFavorIcon(isFavored);
                     });
                 }
+            } catch (ApiFailException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private void addViewCount(){
+        new Thread(()->{
+            try {
+                BookModel.addView(mBook.id);
             } catch (ApiFailException e) {
                 e.printStackTrace();
             }

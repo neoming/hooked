@@ -39,11 +39,20 @@ public class BookModel {
         return Gsoner.fromJson(result.data, bubbleListType);
     }
 
-    public static ArrayList<Book> getSearchList(String keyWords,int page) throws ApiFailException{
-        ApiResult result =Http.get("book/searchBook" + "?key_words=" + keyWords+"&page="+String.valueOf(page));
+    public static ArrayList<Book> getSearchList(String keyWords, int page) throws ApiFailException {
+        ApiResult result = Http.get("book/searchBook" + "?key_words=" + keyWords + "&page=" + String.valueOf(page));
         Type bookListType = new TypeToken<ArrayList<Book>>() {
         }.getType();
         return Gsoner.fromJson(result.data, bookListType);
+    }
+
+    public static void addView(int book_id) throws ApiFailException {
+        Http.get("book/view?book_id=" + book_id);
+    }
+
+    public static Book getOneBook(int book_id) throws ApiFailException {
+        ApiResult result = Http.get("book/info?book_id=" + book_id);
+        return Gsoner.fromJson(result.data, Book.class);
     }
 
 }

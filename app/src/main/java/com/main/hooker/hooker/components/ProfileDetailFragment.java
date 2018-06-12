@@ -93,14 +93,25 @@ public class ProfileDetailFragment extends Fragment {
         mColAdapter.addHeaderView(mHeaderView);
         recyclerView.setAdapter(mColAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
-        mHeaderView.findViewById(R.id.follower).setOnClickListener((v -> startActivity(new Intent(mContext, FollowerActivity.class))));
+        mHeaderView.findViewById(R.id.follower).setOnClickListener((v -> {
+            Intent intent = new Intent(mContext, FollowerActivity.class);
+            intent.putExtra("user", mUser);
+            startActivity(intent);
+        }));
         mHeaderView.findViewById(R.id.following).setOnClickListener(v -> {
-                Intent intent = new Intent(mContext, FollowActivity.class);
-                intent.putExtra("user", mUser);
-                startActivity(intent);
-            });
+            Intent intent = new Intent(mContext, FollowActivity.class);
+            intent.putExtra("user", mUser);
+            startActivity(intent);
+        });
         mHeaderView.findViewById(R.id.works).setOnClickListener((v -> startActivity(new Intent(mContext, WorkActivity.class))));
         view.findViewById(R.id.icon_back).setOnClickListener(v -> ((Activity) mContext).finish());
+        load();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Toast.makeText(mContext, "Resuming!!!", Toast.LENGTH_SHORT).show();
         load();
     }
 
@@ -111,6 +122,7 @@ public class ProfileDetailFragment extends Fragment {
                     mUser = UserModel.getMe();
                 }
                 if(mUser != null){
+                    mUser = UserModel.getProfile(mUser.id);
                     getActivity().runOnUiThread(()->{
                         updateInfo(mUser);
                     });

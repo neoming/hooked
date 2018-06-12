@@ -1,34 +1,24 @@
 package com.main.hooker.hooker.views;
 
 import android.content.Intent;
-import android.support.annotation.Nullable;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
 import com.main.hooker.hooker.MainApplication;
 import com.main.hooker.hooker.R;
 import com.main.hooker.hooker.adapter.FollowAdapter;
-import com.main.hooker.hooker.components.LoginFragment;
-import com.main.hooker.hooker.components.ProfileDetailFragment;
-import com.main.hooker.hooker.entity.Favor;
 import com.main.hooker.hooker.entity.Follow;
 import com.main.hooker.hooker.entity.User;
 import com.main.hooker.hooker.model.UserModel;
 import com.main.hooker.hooker.utils.http.ApiFailException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class FollowActivity extends AppCompatActivity {

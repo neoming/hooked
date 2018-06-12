@@ -2,7 +2,6 @@ package com.main.hooker.hooker.model;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.main.hooker.hooker.R;
 import com.main.hooker.hooker.entity.Comment;
 import com.main.hooker.hooker.utils.Gsoner;
 import com.main.hooker.hooker.utils.Http;
@@ -11,7 +10,6 @@ import com.main.hooker.hooker.utils.http.ApiResult;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.concurrent.CompletionException;
 
 import okhttp3.RequestBody;
 
@@ -22,23 +20,23 @@ public class BookCommentModel {
                 .add("score", Double.toString(score))
                 .add("comment", content)
                 .build();
-        ApiResult result = Http.post("comment/comment", body);
+        ApiResult result = Http.post("book/comment/comment", body);
     }
 
-    public static void editComment(int book_id, double score, String content) throws ApiFailException {
+    public static void editComment(int comment_id, double score, String content) throws ApiFailException {
         RequestBody body = UserModel.getAuthBodyBuilder()
-                .add("book_id", Integer.toString(book_id))
+                .add("comment_id", Integer.toString(comment_id))
                 .add("score", Double.toString(score))
                 .add("comment", content)
                 .build();
-        ApiResult result = Http.post("comment/edit", body);
+        ApiResult result = Http.post("book/comment/edit", body);
     }
 
-    public static void deleteComment(int book_id) throws ApiFailException {
+    public static void deleteComment(int comment_id) throws ApiFailException {
         RequestBody body = UserModel.getAuthBodyBuilder()
-                .add("book_id", Integer.toString(book_id))
+                .add("comment_id", Integer.toString(comment_id))
                 .build();
-        ApiResult result = Http.post("comment/delete", body);
+        ApiResult result = Http.post("book/comment/delete", body);
 
     }
 
@@ -46,17 +44,17 @@ public class BookCommentModel {
         RequestBody body = UserModel.getAuthBodyBuilder()
                 .add("book_id", Integer.toString(book_id))
                 .build();
-        ApiResult result = Http.post("comment/get_comment", body);
-        return Gsoner.fromJson(result.data, Comment.class);
+        ApiResult result = Http.post("book/comment/get_comment", body);
+        Gson gson = Gsoner.get();
+        return gson.fromJson(result.data, Comment.class);
     }
 
-    public static ArrayList<Comment> getCommentList(int page) throws ApiFailException {
-        RequestBody body = UserModel.getAuthBodyBuilder()
-                .add("page", Integer.toString(page))
-                .build();
-        ApiResult result = Http.post("comment/get_my_comment_list", body);
+    public static ArrayList<Comment> getCommentList(int book_id, int page) throws ApiFailException {
+
+        ApiResult result = Http.get("book/comment/get_comment_list?book_id=" + String.valueOf(book_id) + "&page=" + String.valueOf(page));
+        Gson gson = Gsoner.get();
         Type commentList = new TypeToken<ArrayList<Comment>>() {
         }.getType();
-        return Gsoner.fromJson(result.data, commentList);
+        return gson.fromJson(result.data, commentList);
     }
 }

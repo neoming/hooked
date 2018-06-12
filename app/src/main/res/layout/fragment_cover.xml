@@ -62,6 +62,23 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:layout_width="13dp"
+                    android:layout_height="12dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="12dp"
+                    android:src="@drawable/ic_ali_preview"
+                    android:tint="@color/japanBlue" />
+
+                <TextView
+                    android:id="@+id/viewNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:text="18k"
+                    android:textColor="@android:color/secondary_text_dark_nodisable"
+                    android:textSize="18sp" />
+
+                <ImageView
                     android:layout_width="12dp"
                     android:layout_height="12dp"
                     android:layout_gravity="center"
