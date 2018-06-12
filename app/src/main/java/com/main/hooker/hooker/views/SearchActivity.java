@@ -1,5 +1,6 @@
 package com.main.hooker.hooker.views;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.main.hooker.hooker.R;
 import com.main.hooker.hooker.adapter.BookAdapter;
 import com.main.hooker.hooker.adapter.FollowAdapter;
@@ -38,6 +40,11 @@ public class SearchActivity extends AppCompatActivity {
         View header = View.inflate(this,R.layout.header_add_book,null);
         bookAdapter = new BookAdapter(R.layout.item_serach_book,searched_books);
         bookAdapter.addHeaderView(header);
+        bookAdapter.setOnItemClickListener((adapter, view, position) -> {
+            Intent intent = new Intent(this, ContentActivity.class);
+            intent.putExtra("book", (Book)adapter.getItem(position));
+            startActivity(intent);
+        });
 
         recyclerView = findViewById(R.id.recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
