@@ -1,5 +1,6 @@
 package com.main.hooker.hooker.components;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,6 +19,7 @@ import com.main.hooker.hooker.entity.Book;
 import com.main.hooker.hooker.model.BookModel;
 import com.main.hooker.hooker.model.UserModel;
 import com.main.hooker.hooker.utils.http.ApiFailException;
+import com.main.hooker.hooker.views.ProfileActivity;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -58,6 +60,13 @@ public class CoverFragment extends Fragment {
         CircleImageView imageView = view.findViewById(R.id.cover_logo);
         imageView.setOnClickListener((View image)->{
             getActivity().finishAfterTransition();
+        });
+
+        TextView tvAuthor = view.findViewById(R.id.author);
+        tvAuthor.setOnClickListener(v->{
+            Intent intent = new Intent(getActivity(), ProfileActivity.class);
+            intent.putExtra("user", mBook.author);
+            startActivity(intent);
         });
 
         mFavIcon = getView().findViewById(R.id.icon_notification);

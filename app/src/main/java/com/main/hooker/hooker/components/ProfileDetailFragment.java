@@ -9,14 +9,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.transition.Fade;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,11 +32,13 @@ import com.main.hooker.hooker.entity.User;
 import com.main.hooker.hooker.model.UserModel;
 import com.main.hooker.hooker.utils.State;
 import com.main.hooker.hooker.utils.http.ApiFailException;
-import com.main.hooker.hooker.utils.http.ApiResult;
+import com.main.hooker.hooker.views.ContentActivity;
 import com.main.hooker.hooker.views.FollowActivity;
 import com.main.hooker.hooker.views.FollowerActivity;
 import com.main.hooker.hooker.views.WorkActivity;
 import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +51,7 @@ public class ProfileDetailFragment extends Fragment {
     private BookCollectAdapter mColAdapter;
     private ImageView mPopMenuBtn;
     private TextView mNavMenuFollowBtn;
+    private ArrayList<Book> mMyFavorings = new ArrayList<Book>();
 
     @Override
     public void onAttach(Context context) {
@@ -81,24 +85,16 @@ public class ProfileDetailFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.recycler);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mHeaderView = View.inflate(mContext, R.layout.header_profile, null);
-        new Thread(() -> {
-            try {
-                List<Favor> favors = UserModel.getFavorings(mUser.id, 0);
-                List<Book> books = new ArrayList<>();
-                for (Favor favor : favors)
-                    books.add(favor.book);
-                getActivity().runOnUiThread(()-> {
-                    mColAdapter.setNewData(books);
-                });
-            } catch (ApiFailException e) {
-                e.printStackTrace();
-            }
-        }).start();
 
-        mColAdapter = new BookCollectAdapter(new ArrayList<>());
+        mColAdapter = new BookCollectAdapter(mMyFavorings);
         mColAdapter.addHeaderView(mHeaderView);
+        mColAdapter.setOnItemClickListener((adapter, v, position)->{
+            Intent intent = new Intent(getActivity(), ContentActivity.class);
+            intent.putExtra("book", (Book)adapter.getItem(position));
+            startActivity(intent);
+        });
         recyclerView.setAdapter(mColAdapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
+        //recyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
         mHeaderView.findViewById(R.id.follower).setOnClickListener((v -> {
             Intent intent = new Intent(mContext, FollowerActivity.class);
             intent.putExtra("user", mUser);
@@ -129,7 +125,6 @@ public class ProfileDetailFragment extends Fragment {
                 }
                 if(mUser != null){
                     try {
-
                         mUser = UserModel.getProfile(mUser.id);
                     }catch (ApiFailException e){
                         e.printStackTrace();
@@ -138,6 +133,26 @@ public class ProfileDetailFragment extends Fragment {
                         updateInfo(mUser);
                     });
                 }
+            } catch (ApiFailException e) {
+                e.printStackTrace();
+            }
+        }).start();
+        loadMyFavorings();
+    }
+
+    public void loadMyFavorings(){
+        Log.e("test", "hahahahahahahaahaha" + mMyFavorings.size() + "!!!!!!!!!!!");
+        new Thread(()->{
+            try {
+                ArrayList<Favor> list = UserModel.getFavorings(mUser.id, 1);
+                ArrayList<Book> bookList = new ArrayList<>();
+                for (Favor favor:list) {
+                    if(favor.book != null)
+                        bookList.add(favor.book);
+                }
+                getActivity().runOnUiThread(()->{
+                    mColAdapter.setNewData(bookList);
+                });
             } catch (ApiFailException e) {
                 e.printStackTrace();
             }
@@ -184,10 +199,13 @@ public class ProfileDetailFragment extends Fragment {
         if (getView() != null) {
             State state = MainApplication.getState();
             TextView navTitle = getView().findViewById(R.id.navbar_title);
+            TextView likeTitle = getView().findViewById(R.id.like_title);
             if (state.userGetUid() == user.id)
                 navTitle.setText("My Profile");
-            else
+            else {
                 navTitle.setText(user.username + "'s Profile");
+                likeTitle.setText(user.username + "'s Like");
+            }
         }
         TextView tvUsername = mHeaderView.findViewById(R.id.profile_username);
         TextView tvFullname = mHeaderView.findViewById(R.id.profile_full_name);
@@ -207,8 +225,6 @@ public class ProfileDetailFragment extends Fragment {
     }
 
     public void updateNavMenus(User user){
-
-
         if(mUser.id == MainApplication.getState().userGetUid()){
             mPopMenuBtn.setVisibility(View.VISIBLE);
             mNavMenuFollowBtn.setVisibility(View.INVISIBLE);
@@ -276,7 +292,7 @@ public class ProfileDetailFragment extends Fragment {
         @Override
         protected void convert(BaseViewHolder helper, Book item) {
             helper.setText(R.id.title, item.title);
-            helper.setText(R.id.author, "xyy");
+            helper.setText(R.id.author, item.author == null ? "unknown" : item.author.username);
             Picasso.get().load(item.cover_img).into((ImageView) helper.getView(R.id.cover));
         }
     }
