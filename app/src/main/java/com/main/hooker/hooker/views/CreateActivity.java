@@ -1,7 +1,5 @@
 package com.main.hooker.hooker.views;
 
-import android.app.AlertDialog;
-import android.app.DialogFragment;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,17 +7,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.main.hooker.hooker.R;
 import com.main.hooker.hooker.adapter.BubbleAdapter;
-import com.main.hooker.hooker.adapter.CharacterCircleAdapter;
+import com.main.hooker.hooker.adapter.PlaceCircleAdapter;
 import com.main.hooker.hooker.components.SetBookDialog;
 import com.main.hooker.hooker.entity.Bubble;
 import com.main.hooker.hooker.entity.Character;
-import com.main.hooker.hooker.model.UserModel;
-import com.main.hooker.hooker.utils.http.ApiFailException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,11 +35,13 @@ public class CreateActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         circles.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        BubbleAdapter adapter = new BubbleAdapter();
-        CharacterCircleAdapter circleAdapter = new CharacterCircleAdapter(R.layout.item_character_circle,
-                Arrays.asList(new Character(), new Character()));
+        BubbleAdapter adapter = new BubbleAdapter(new ArrayList<>());
+        PlaceCircleAdapter circleAdapter = new PlaceCircleAdapter(R.layout.item_place_circle,
+                Arrays.asList(
+                        new PlaceCircleAdapter.Place(0),
+                        new PlaceCircleAdapter.Place(1),
+                        new PlaceCircleAdapter.Place(2)));
 
-        adapter.setNewData(new ArrayList<>());
         adapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
         recyclerView.setAdapter(adapter);
         circles.setAdapter(circleAdapter);

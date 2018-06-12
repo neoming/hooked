@@ -93,7 +93,8 @@ public class PageFragment extends Fragment {
             Book book = wrapper.book;
             detail = view1.findViewById(R.id.title_container);
             detail.animate().alpha(0.0f).setDuration(300).start();
-            appbar.animate().alpha(0.0f).setDuration(300).start();
+            if (appbar != null)
+                appbar.animate().alpha(0.0f).setDuration(300).start();
 
             new Handler().postDelayed(() -> {
                 intent.putExtra("book", book);

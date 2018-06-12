@@ -10,4 +10,10 @@ public class Comment {
     public String update_at;
     public User user;
     public Book book;
+
+    public Comment(float score, String content, User user) {
+        this.score = score;
+        this.content = content;
+        this.user = user;
+    }
 }

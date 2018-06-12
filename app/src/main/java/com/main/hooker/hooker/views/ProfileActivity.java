@@ -45,8 +45,12 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     public void toProfile() {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment, ProfileDetailFragment.newInstance(new User()))
-                .commit();
+        try {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment, ProfileDetailFragment.newInstance(UserModel.getMe()))
+                    .commit();
+        } catch (ApiFailException e) {
+            e.printStackTrace();
+        }
     }
 }

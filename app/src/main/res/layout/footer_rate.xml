@@ -2,14 +2,16 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp">
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Happiness"
-        android:textSize="20sp"
+        android:textSize="18sp"
+        android:textStyle="bold"
         android:layout_marginTop="4dp"
         android:textColor="@android:color/primary_text_light"
         android:layout_centerHorizontal="true"/>
@@ -19,23 +21,25 @@
         android:layout_width="match_parent"
         android:layout_marginTop="20dp"
         android:layout_height="80dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp">
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp">
         <LinearLayout
             android:id="@+id/love"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <TextView
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Loved"
-                android:textSize="16sp"
-                android:textColor="@android:color/secondary_text_light"/>
+                android:src="@drawable/ic_ali_love"
+                android:layout_marginBottom="8dp"
+                android:tint="#e95295"/>
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/lovedNum"
+                android:layout_gravity="center"
                 android:text="12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:textColor="@android:color/secondary_text_light"/>
         </LinearLayout>
@@ -46,16 +50,40 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <TextView
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Comments"
-                android:textSize="16sp"
-                android:textColor="@android:color/secondary_text_light"/>
+                android:src="@drawable/ic_ali_comment"
+                android:layout_marginBottom="8dp"
+                android:tint="#895b8a"/>
             <TextView
+                android:id="@+id/commentNum"
+                android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="12"
+                android:textSize="16sp"
+                android:textColor="@android:color/secondary_text_light"/>
+        </LinearLayout>
+
+        <LinearLayout
+
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_icon_rate"
+                android:layout_marginBottom="8dp"
+                android:tint="#e6b422"/>
+            <TextView
+                android:id="@+id/rateNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12"
+                android:layout_gravity="center"
                 android:textSize="16sp"
                 android:textColor="@android:color/secondary_text_light"/>
         </LinearLayout>

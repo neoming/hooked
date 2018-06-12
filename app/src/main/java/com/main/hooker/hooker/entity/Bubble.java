@@ -1,6 +1,8 @@
 package com.main.hooker.hooker.entity;
 
-public class Bubble {
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
+public class Bubble implements MultiItemEntity {
     public int id;
     public int book_id;
     public int order_id;
@@ -19,5 +21,10 @@ public class Bubble {
                 ", character_id=" + character_id +
                 ", content='" + content + '\'' +
                 '}';
+    }
+
+    @Override
+    public int getItemType() {
+        return 0;
     }
 }
