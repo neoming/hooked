@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.main.hooker.hooker.R;
 import com.main.hooker.hooker.entity.Book;
@@ -29,6 +30,8 @@ public class CoverFragment extends Fragment {
 
     private View appbar;
     private View detail;
+
+    private ImageView mFavIcon;
 
     public static CoverFragment newInstance(Book book) {
         CoverFragment fragment = new CoverFragment();
@@ -57,6 +60,21 @@ public class CoverFragment extends Fragment {
             getActivity().finishAfterTransition();
         });
 
+        mFavIcon = getView().findViewById(R.id.icon_notification);
+
+        mFavIcon.setOnClickListener(v -> {
+            String tag = (String) mFavIcon.getTag();
+            if(tag == null){
+                return;
+            }
+            if(tag.equals("lit")){
+                tag.equals("unlighting...");
+                unlightFavor();
+            } else if(tag.equals("unlit")) {
+                tag.equals("lighting...");
+                lightFavor();
+            }
+        });
 
         detail.animate().alpha(1.0f).setStartDelay(500);
         appbar.animate().alpha(1.0f).setStartDelay(500);
@@ -76,11 +94,13 @@ public class CoverFragment extends Fragment {
     }
 
     private void setFavorIcon(boolean lit){
-        ImageView icon = getView().findViewById(R.id.icon_notification);
+        ImageView icon = mFavIcon;
         if(lit){
             icon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(),R.color.litYellow)));
+            icon.setTag("lit");
         } else {
             icon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(),R.color.white)));
+            icon.setTag("unlit");
         }
     }
 
@@ -110,6 +130,7 @@ public class CoverFragment extends Fragment {
             favoredCount.setText(String.valueOf(mBook.favor_count));
             TextView desc = view.findViewById(R.id.description);
             desc.setText(mBook.desc);
+            checkIsFavored();
         }
 
     }
@@ -135,6 +156,48 @@ public class CoverFragment extends Fragment {
                 BookModel.addView(mBook.id);
             } catch (ApiFailException e) {
                 e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private void lightFavor(){
+        new Thread(()->{
+            try {
+                UserModel.favor(mBook.id);
+                setFavorIcon(true);
+                freshState();
+            } catch (ApiFailException e) {
+                e.printStackTrace();
+                if(e.getApiResult().code == 402){
+                    setFavorIcon(true);
+                } else {
+                    setFavorIcon(false);
+                }
+                getActivity().runOnUiThread(()->{
+                    Toast.makeText(getContext(), "Failed: " + e.getApiResult().msg, Toast.LENGTH_SHORT)
+                            .show();
+                });
+            }
+        }).start();
+    }
+
+    private void unlightFavor(){
+        new Thread(()->{
+            try {
+                UserModel.unfavor(mBook.id);
+                setFavorIcon(false);
+                freshState();
+            } catch (ApiFailException e) {
+                e.printStackTrace();
+                if(e.getApiResult().code == 402){
+                    setFavorIcon(false);
+                } else {
+                    setFavorIcon(true);
+                }
+                getActivity().runOnUiThread(()->{
+                    Toast.makeText(getContext(), "Failed: " + e.getApiResult().msg, Toast.LENGTH_SHORT)
+                            .show();
+                });
             }
         }).start();
     }

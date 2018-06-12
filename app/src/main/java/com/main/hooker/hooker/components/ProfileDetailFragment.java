@@ -31,6 +31,7 @@ import com.main.hooker.hooker.entity.User;
 import com.main.hooker.hooker.model.UserModel;
 import com.main.hooker.hooker.utils.State;
 import com.main.hooker.hooker.utils.http.ApiFailException;
+import com.main.hooker.hooker.utils.http.ApiResult;
 import com.main.hooker.hooker.views.FollowActivity;
 import com.main.hooker.hooker.views.FollowerActivity;
 import com.main.hooker.hooker.views.WorkActivity;
@@ -117,7 +118,6 @@ public class ProfileDetailFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Toast.makeText(mContext, "Resuming!!!", Toast.LENGTH_SHORT).show();
         load();
     }
 
@@ -128,7 +128,12 @@ public class ProfileDetailFragment extends Fragment {
                     mUser = UserModel.getMe();
                 }
                 if(mUser != null){
-                    mUser = UserModel.getProfile(mUser.id);
+                    try {
+
+                        mUser = UserModel.getProfile(mUser.id);
+                    }catch (ApiFailException e){
+                        e.printStackTrace();
+                    }
                     getActivity().runOnUiThread(()->{
                         updateInfo(mUser);
                     });
@@ -170,7 +175,6 @@ public class ProfileDetailFragment extends Fragment {
                 mNavMenuFollowBtn.setText("UNFOLLOWING...");
                 unfollow();
             }
-            load();
         });
     }
 
@@ -226,6 +230,7 @@ public class ProfileDetailFragment extends Fragment {
                 getActivity().runOnUiThread(()->{
                     mNavMenuFollowBtn.setText("UNFOLLOW");
                 });
+                load();
             } catch (ApiFailException e) {
                 if(e.getApiResult().code == 402){
                     mNavMenuFollowBtn.setText("UNFOLLOW");
@@ -247,6 +252,7 @@ public class ProfileDetailFragment extends Fragment {
                 getActivity().runOnUiThread(()->{
                     mNavMenuFollowBtn.setText("FOLLOW");
                 });
+                load();
             } catch (ApiFailException e) {
                 getActivity().runOnUiThread(()->{
                     if(e.getApiResult().code == 403){
