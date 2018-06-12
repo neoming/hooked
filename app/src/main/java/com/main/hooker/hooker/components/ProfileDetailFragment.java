@@ -13,7 +13,6 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.transition.Fade;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,8 +36,6 @@ import com.main.hooker.hooker.views.FollowActivity;
 import com.main.hooker.hooker.views.FollowerActivity;
 import com.main.hooker.hooker.views.WorkActivity;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,13 +85,7 @@ public class ProfileDetailFragment extends Fragment {
 
         mColAdapter = new BookCollectAdapter(mMyFavorings);
         mColAdapter.addHeaderView(mHeaderView);
-        mColAdapter.setOnItemClickListener((adapter, v, position)->{
-            Intent intent = new Intent(getActivity(), ContentActivity.class);
-            intent.putExtra("book", (Book)adapter.getItem(position));
-            startActivity(intent);
-        });
         recyclerView.setAdapter(mColAdapter);
-        //recyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
         mHeaderView.findViewById(R.id.follower).setOnClickListener((v -> {
             Intent intent = new Intent(mContext, FollowerActivity.class);
             intent.putExtra("user", mUser);
@@ -109,6 +100,11 @@ public class ProfileDetailFragment extends Fragment {
         view.findViewById(R.id.icon_back).setOnClickListener(v -> ((Activity) mContext).finish());
         updateInfo(mUser);
         load();
+        mColAdapter.setOnItemClickListener(((adapter, view1, position) -> {
+            Intent intent = new Intent(getActivity(), ContentActivity.class);
+            intent.putExtra("book", (Book)adapter.getItem(position));
+            startActivity(intent);
+        }));
     }
 
     @Override
@@ -141,7 +137,6 @@ public class ProfileDetailFragment extends Fragment {
     }
 
     public void loadMyFavorings(){
-        Log.e("test", "hahahahahahahaahaha" + mMyFavorings.size() + "!!!!!!!!!!!");
         new Thread(()->{
             try {
                 ArrayList<Favor> list = UserModel.getFavorings(mUser.id, 1);
@@ -199,13 +194,10 @@ public class ProfileDetailFragment extends Fragment {
         if (getView() != null) {
             State state = MainApplication.getState();
             TextView navTitle = getView().findViewById(R.id.navbar_title);
-            TextView likeTitle = getView().findViewById(R.id.like_title);
             if (state.userGetUid() == user.id)
                 navTitle.setText("My Profile");
-            else {
+            else
                 navTitle.setText(user.username + "'s Profile");
-                likeTitle.setText(user.username + "'s Like");
-            }
         }
         TextView tvUsername = mHeaderView.findViewById(R.id.profile_username);
         TextView tvFullname = mHeaderView.findViewById(R.id.profile_full_name);
