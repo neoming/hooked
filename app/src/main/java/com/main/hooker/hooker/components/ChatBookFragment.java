@@ -101,7 +101,7 @@ public class ChatBookFragment extends Fragment {
 
     public void getNewBubble(){
         if(!mHasMore){
-            Toast.makeText(getContext(), "There is no more", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(), "There is no more", Toast.LENGTH_SHORT).show();
             if (!mHasFooter) mAdapter.addData(new BubbleAdapter.FooterBook());
             mRecyclerView.scrollToPosition(mAdapter.getItemCount() - 1);
             mHasFooter = true;

@@ -3,6 +3,7 @@ package com.main.hooker.hooker.adapter;
 import android.app.Activity;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,6 +14,7 @@ import com.main.hooker.hooker.R;
 import com.main.hooker.hooker.entity.User;
 import com.main.hooker.hooker.model.UserModel;
 import com.main.hooker.hooker.utils.http.ApiFailException;
+import com.main.hooker.hooker.views.FollowActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -30,6 +32,11 @@ public class FollowAdapter extends BaseQuickAdapter<User, BaseViewHolder> {
                 .into((ImageView) helper.itemView.findViewById(R.id.cover_logo));
         helper.setText(R.id.username, item.username);
         CardView followBtn = helper.itemView.findViewById(R.id.follow_btn);
+        if(mContext instanceof FollowActivity){
+            if(!((FollowActivity) mContext).isUserSelf()){
+                followBtn.setVisibility(View.INVISIBLE);
+            }
+        }
         TextView followBtnTitle = followBtn.findViewById(R.id.follow_btn_title);
         followBtnTitle.setText("Unfollow");
         followBtn.setOnClickListener((view)->{
