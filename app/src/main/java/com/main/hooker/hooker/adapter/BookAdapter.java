@@ -28,7 +28,12 @@ public class BookAdapter extends BaseQuickAdapter<Book, BaseViewHolder> {
         //helper.setText(,"");
         Log.d(TAG, "convert: book = " + item.title);
         helper.setText(R.id.search_book_title,item.title);
-        helper.setText(R.id.search_book_author,"xyy");
+        User author = item.author;
+        if(author == null){
+            helper.setText(R.id.search_book_author,"xyy");
+        }else {
+            helper.setText(R.id.search_book_author,item.author.username);
+        }
         Picasso.get().load(item.cover_img).into((ImageView) helper.getView(R.id.search_book_cover_img));
     }
 }
