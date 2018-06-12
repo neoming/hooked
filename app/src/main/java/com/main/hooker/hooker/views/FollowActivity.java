@@ -40,6 +40,7 @@ public class FollowActivity extends AppCompatActivity {
     private int mPage = 0;
     private boolean isLoading = false;
     private User mUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
