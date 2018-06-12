@@ -1,5 +1,7 @@
 package com.main.hooker.hooker.utils;
 
+import java.text.DecimalFormat;
+
 public class Tool {
     public static String indexToType(int index) {
         switch (index) {
@@ -17,5 +19,10 @@ public class Tool {
             default:
                 return "All";
         }
+    }
+
+    public static String floatToStr(float src){
+        DecimalFormat format = new DecimalFormat(".0");
+        return format.format(src);
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="16dp">
@@ -24,52 +25,31 @@
         android:paddingStart="32dp"
         android:paddingEnd="32dp">
         <LinearLayout
-            android:id="@+id/love"
+            android:id="@+id/view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_ali_love"
                 android:layout_marginBottom="8dp"
-                android:tint="#e95295"/>
+                android:src="@drawable/ic_ali_preview"
+                android:tint="#895b8a" />
             <TextView
-                android:id="@+id/lovedNum"
+                android:id="@+id/viewNum"
                 android:layout_gravity="center"
-                android:text="12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="12"
                 android:textSize="16sp"
                 android:textColor="@android:color/secondary_text_light"/>
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/comment"
+            android:id="@+id/rate"
+            android:layout_width="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_ali_comment"
-                android:layout_marginBottom="8dp"
-                android:tint="#895b8a"/>
-            <TextView
-                android:id="@+id/commentNum"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="12"
-                android:textSize="16sp"
-                android:textColor="@android:color/secondary_text_light"/>
-        </LinearLayout>
-
-        <LinearLayout
-
-            android:layout_alignParentEnd="true"
-            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical">
             <ImageView
@@ -87,5 +67,31 @@
                 android:textSize="16sp"
                 android:textColor="@android:color/secondary_text_light"/>
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/love"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_ali_love"
+                android:layout_marginBottom="8dp"
+                android:tint="#e95295"/>
+            <TextView
+                android:id="@+id/lovedNum"
+                android:layout_gravity="center"
+                android:text="12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@android:color/secondary_text_light"/>
+        </LinearLayout>
+
+
+
+
     </RelativeLayout>
 </RelativeLayout>

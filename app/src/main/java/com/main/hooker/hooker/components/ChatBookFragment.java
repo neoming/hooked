@@ -2,7 +2,6 @@ package com.main.hooker.hooker.components;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,27 +13,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.main.hooker.hooker.R;
 import com.main.hooker.hooker.adapter.BubbleAdapter;
 import com.main.hooker.hooker.entity.Book;
-import com.main.hooker.hooker.entity.BookWrapper;
 import com.main.hooker.hooker.entity.Bubble;
-import com.main.hooker.hooker.entity.Comment;
-import com.main.hooker.hooker.entity.User;
 import com.main.hooker.hooker.model.BookModel;
-import com.main.hooker.hooker.utils.Tool;
 import com.main.hooker.hooker.utils.http.ApiFailException;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 
 public class ChatBookFragment extends Fragment {
@@ -102,7 +93,7 @@ public class ChatBookFragment extends Fragment {
     public void getNewBubble(){
         if(!mHasMore){
             //Toast.makeText(getContext(), "There is no more", Toast.LENGTH_SHORT).show();
-            if (!mHasFooter) mAdapter.addData(new BubbleAdapter.FooterBook());
+            if (!mHasFooter) mAdapter.addData(new BubbleAdapter.FooterBook(book));
             mRecyclerView.scrollToPosition(mAdapter.getItemCount() - 1);
             mHasFooter = true;
             return;

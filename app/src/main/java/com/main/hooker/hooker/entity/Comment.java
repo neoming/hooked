@@ -6,8 +6,8 @@ public class Comment {
     public int book_id;
     public float score;
     public String content;
-    public String create_at;
-    public String update_at;
+    public String create_time;
+    public String update_time;
     public User user;
     public Book book;
 

@@ -4,7 +4,9 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.main.hooker.hooker.R;
+import com.main.hooker.hooker.entity.Book;
 import com.main.hooker.hooker.entity.Bubble;
+import com.main.hooker.hooker.utils.Tool;
 
 import java.util.List;
 
@@ -43,13 +45,32 @@ public class BubbleAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, Ba
                 break;
             case 1:
                 FooterBook comment = (FooterBook) single;
-                helper.addOnClickListener(R.id.comment);
+                Book book = comment.getBook();
+                helper.setText(R.id.title, book.title);
+                helper.setText(R.id.viewNum, String.valueOf(book.view_count));
+                helper.setText(R.id.lovedNum, String.valueOf(book.favor_count));
+                String scoreStr = "5.0";
+                if(book.score_count > 0){
+                    float score = (float) book.score_total / book.score_count;
+                    scoreStr = Tool.floatToStr(score);
+                }
+                helper.setText(R.id.rateNum,
+                        scoreStr + "(" + String.valueOf(book.score_count) + ")");
+                helper.addOnClickListener(R.id.rate);
                 break;
         }
 
     }
 
     public static class FooterBook implements MultiItemEntity {
+        private Book mBook;
+        public FooterBook(Book book){
+            mBook = book;
+        }
+
+        public Book getBook(){
+            return mBook;
+        }
 
         @Override
         public int getItemType() {
