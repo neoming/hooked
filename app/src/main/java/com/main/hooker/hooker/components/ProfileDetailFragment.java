@@ -164,8 +164,10 @@ public class ProfileDetailFragment extends Fragment {
         mNavMenuFollowBtn = view.findViewById(R.id.follow_btn);
         mNavMenuFollowBtn.setOnClickListener(v->{
             if(mNavMenuFollowBtn.getText().equals("FOLLOW")){
+                mNavMenuFollowBtn.setText("FOLLOWING...");
                 follow();
-            }else{
+            }else if(mNavMenuFollowBtn.getText().equals("UNFOLLOW")){
+                mNavMenuFollowBtn.setText("UNFOLLOWING...");
                 unfollow();
             }
             load();
@@ -201,6 +203,8 @@ public class ProfileDetailFragment extends Fragment {
     }
 
     public void updateNavMenus(User user){
+
+
         if(mUser.id == MainApplication.getState().userGetUid()){
             mPopMenuBtn.setVisibility(View.VISIBLE);
             mNavMenuFollowBtn.setVisibility(View.INVISIBLE);
@@ -225,19 +229,21 @@ public class ProfileDetailFragment extends Fragment {
             } catch (ApiFailException e) {
                 if(e.getApiResult().code == 402){
                     mNavMenuFollowBtn.setText("UNFOLLOW");
+                } else {
+                    mNavMenuFollowBtn.setText("FOLLOW");
                 }
                 getActivity().runOnUiThread(()->{
                     Toast.makeText(mContext, "Failed: " + e.getApiResult().msg, Toast.LENGTH_SHORT)
                             .show();
                 });
             }
-        });
+        }).start();
     }
 
     public void unfollow(){
         new Thread(()->{
             try {
-                UserModel.follow(mUser.id);
+                UserModel.unfollow(mUser.id);
                 getActivity().runOnUiThread(()->{
                     mNavMenuFollowBtn.setText("FOLLOW");
                 });
@@ -245,12 +251,14 @@ public class ProfileDetailFragment extends Fragment {
                 getActivity().runOnUiThread(()->{
                     if(e.getApiResult().code == 403){
                         mNavMenuFollowBtn.setText("FOLLOW");
+                    } else {
+                        mNavMenuFollowBtn.setText("UNFOLLOW");
                     }
                     Toast.makeText(mContext, "Failed: " + e.getApiResult().msg, Toast.LENGTH_SHORT)
                             .show();
                 });
             }
-        });
+        }).start();
     }
 
     private static class BookCollectAdapter extends BaseQuickAdapter<Book, BaseViewHolder> {
