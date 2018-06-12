@@ -8,10 +8,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.transition.Fade;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +19,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.main.hooker.hooker.MainActivity;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 import com.main.hooker.hooker.MainApplication;
 import com.main.hooker.hooker.R;
-import com.main.hooker.hooker.adapter.CollectionAdapter;
+import com.main.hooker.hooker.entity.Book;
+import com.main.hooker.hooker.entity.Favor;
 import com.main.hooker.hooker.entity.User;
 import com.main.hooker.hooker.model.UserModel;
 import com.main.hooker.hooker.utils.State;
@@ -34,13 +35,14 @@ import com.main.hooker.hooker.views.WorkActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ProfileDetailFragment extends Fragment {
     private User mUser;
     private Context mContext;
     private View mHeaderView;
-    private CollectionAdapter mColAdapter;
+    private BookCollectAdapter mColAdapter;
 
     @Override
     public void onAttach(Context context) {
@@ -87,31 +89,44 @@ public class ProfileDetailFragment extends Fragment {
         });
 
         RecyclerView recyclerView = view.findViewById(R.id.recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mHeaderView = View.inflate(mContext, R.layout.header_profile, null);
-        mColAdapter = new CollectionAdapter(R.layout.item_work, new ArrayList<>());
+        new Thread(() -> {
+            try {
+                List<Favor> favors = UserModel.getFavorings(mUser.id, 0);
+                List<Book> books = new ArrayList<>();
+                for (Favor favor : favors)
+                    books.add(favor.book);
+                getActivity().runOnUiThread(()-> {
+                    mColAdapter.setNewData(books);
+                });
+            } catch (ApiFailException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+        mColAdapter = new BookCollectAdapter(new ArrayList<>());
         mColAdapter.addHeaderView(mHeaderView);
         recyclerView.setAdapter(mColAdapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
         mHeaderView.findViewById(R.id.follower).setOnClickListener((v -> startActivity(new Intent(mContext, FollowerActivity.class))));
         mHeaderView.findViewById(R.id.following).setOnClickListener(v -> {
-                Intent intent = new Intent(mContext, FollowActivity.class);
-                intent.putExtra("user", mUser);
-                startActivity(intent);
-            });
+            Intent intent = new Intent(mContext, FollowActivity.class);
+            intent.putExtra("user", mUser);
+            startActivity(intent);
+        });
         mHeaderView.findViewById(R.id.works).setOnClickListener((v -> startActivity(new Intent(mContext, WorkActivity.class))));
         view.findViewById(R.id.icon_back).setOnClickListener(v -> ((Activity) mContext).finish());
         load();
     }
 
-    public void load(){
-        new Thread(()->{
+    public void load() {
+        new Thread(() -> {
             try {
-                if(mUser == null){
+                if (mUser == null) {
                     mUser = UserModel.getMe();
                 }
-                if(mUser != null){
-                    getActivity().runOnUiThread(()->{
+                if (mUser != null) {
+                    getActivity().runOnUiThread(() -> {
                         updateInfo(mUser);
                     });
                 }
@@ -121,11 +136,11 @@ public class ProfileDetailFragment extends Fragment {
         }).start();
     }
 
-    public void updateInfo(User user){
-        if(getView()!=null){
+    public void updateInfo(User user) {
+        if (getView() != null) {
             State state = MainApplication.getState();
             TextView navTitle = getView().findViewById(R.id.navbar_title);
-            if(state.userGetUid() == user.id)
+            if (state.userGetUid() == user.id)
                 navTitle.setText("My Profile");
             else
                 navTitle.setText(user.username + "'s Profile");
@@ -144,5 +159,19 @@ public class ProfileDetailFragment extends Fragment {
                 .placeholder(R.drawable.avatar_placeholder)
                 .error(R.drawable.avatar_placeholder)
                 .into((ImageView) mHeaderView.findViewById(R.id.profile_user_avatar));
+    }
+
+    private static class BookCollectAdapter extends BaseQuickAdapter<Book, BaseViewHolder> {
+
+        private BookCollectAdapter(@Nullable List<Book> data) {
+            super(R.layout.item_book_collection, data);
+        }
+
+        @Override
+        protected void convert(BaseViewHolder helper, Book item) {
+            helper.setText(R.id.title, item.title);
+            helper.setText(R.id.author, "xyy");
+            Picasso.get().load(item.cover_img).into((ImageView) helper.getView(R.id.cover));
+        }
     }
 }

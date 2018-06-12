@@ -85,9 +85,6 @@ public class CreateActivity extends AppCompatActivity {
             }
         });
 
-
-
-
         PlaceCircleAdapter circleAdapter = new PlaceCircleAdapter(R.layout.item_place_circle,
                 Arrays.asList(
                         new PlaceCircleAdapter.Place(0),
