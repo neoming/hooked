@@ -164,14 +164,16 @@ public class CoverFragment extends Fragment {
         new Thread(()->{
             try {
                 UserModel.favor(mBook.id);
-                setFavorIcon(true);
-                freshState();
+                getActivity().runOnUiThread(()-> {
+                    setFavorIcon(true);
+                    freshState();
+                });
             } catch (ApiFailException e) {
                 e.printStackTrace();
                 if(e.getApiResult().code == 402){
-                    setFavorIcon(true);
+                    getActivity().runOnUiThread(()-> setFavorIcon(true));
                 } else {
-                    setFavorIcon(false);
+                    getActivity().runOnUiThread(()-> setFavorIcon(false));
                 }
                 getActivity().runOnUiThread(()->{
                     Toast.makeText(getContext(), "Failed: " + e.getApiResult().msg, Toast.LENGTH_SHORT)
@@ -185,14 +187,16 @@ public class CoverFragment extends Fragment {
         new Thread(()->{
             try {
                 UserModel.unfavor(mBook.id);
-                setFavorIcon(false);
-                freshState();
+                getActivity().runOnUiThread(()->{
+                    setFavorIcon(false);
+                    freshState();
+                });
             } catch (ApiFailException e) {
                 e.printStackTrace();
                 if(e.getApiResult().code == 402){
-                    setFavorIcon(false);
+                    getActivity().runOnUiThread(()-> setFavorIcon(false));
                 } else {
-                    setFavorIcon(true);
+                    getActivity().runOnUiThread(()-> setFavorIcon(true));
                 }
                 getActivity().runOnUiThread(()->{
                     Toast.makeText(getContext(), "Failed: " + e.getApiResult().msg, Toast.LENGTH_SHORT)
