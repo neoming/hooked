@@ -56,11 +56,12 @@ public class SearchActivity extends AppCompatActivity {
                     new Thread(() -> {
                         try {
                             searched_books = BookModel.getSearchList(query,0);
-                            if(!searched_books.isEmpty()){
-                                runOnUiThread(()->{
-                                    bookAdapter.setNewData(searched_books);
-                                });
+                            if(searched_books== null || searched_books.isEmpty()){
+                                throw new ApiFailException();
                             }
+                            runOnUiThread(()->{
+                                bookAdapter.setNewData(searched_books);
+                            });
                         } catch (ApiFailException e) {
                             e.printStackTrace();
                         }
@@ -73,11 +74,12 @@ public class SearchActivity extends AppCompatActivity {
                     new Thread(() -> {
                         try {
                             searched_books = BookModel.getSearchList(newText,0);
-                            if(!searched_books.isEmpty()){
-                                runOnUiThread(()->{
-                                    bookAdapter.setNewData(searched_books);
-                                });
+                            if(searched_books== null || searched_books.isEmpty()){
+                                throw new ApiFailException();
                             }
+                            runOnUiThread(()->{
+                                bookAdapter.setNewData(searched_books);
+                            });
                         } catch (ApiFailException e) {
                             e.printStackTrace();
                         }
