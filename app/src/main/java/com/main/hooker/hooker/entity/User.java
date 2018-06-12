@@ -15,6 +15,7 @@ public class User implements Parcelable {
     public String update_time;
     public String create_time;
     public int work_count;
+    public Follow followed;
     public int following_count;
     public int followed_by_count;
     public int favoring_count;

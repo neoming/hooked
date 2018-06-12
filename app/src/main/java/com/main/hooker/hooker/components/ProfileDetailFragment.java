@@ -40,6 +40,8 @@ public class ProfileDetailFragment extends Fragment {
     private User mUser;
     private Context mContext;
     private View mHeaderView;
+    private ImageView mPopMenuBtn;
+    private TextView mNavMenuFollowBtn;
     private CollectionAdapter mColAdapter;
 
     @Override
@@ -69,22 +71,7 @@ public class ProfileDetailFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // set up pop up menu
-        view.findViewById(R.id.popMenu).setOnClickListener(v -> {
-            PopupMenu popupMenu = new PopupMenu(getContext(), v);
-            popupMenu.getMenuInflater().inflate(R.menu.nav_menu, popupMenu.getMenu());
-            popupMenu.show();
-            popupMenu.setOnMenuItemClickListener(item -> {
-                switch (item.getItemId()) {
-                    case R.id.logout:
-                        UserModel.logout();
-                        Toast.makeText(mContext, "logout", Toast.LENGTH_SHORT).show();
-                        ((Activity) mContext).finish();
-                        break;
-                }
-                return false;
-            });
-        });
+        setUpNavMenus();
 
         RecyclerView recyclerView = view.findViewById(R.id.recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
@@ -133,6 +120,41 @@ public class ProfileDetailFragment extends Fragment {
         }).start();
     }
 
+    public void setUpNavMenus(){
+        // set up pop up menu
+        if(getView() == null){
+            return;
+        }
+        View view = getView();
+        mPopMenuBtn = view.findViewById(R.id.popMenu);
+        mPopMenuBtn.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(getContext(), v);
+            popupMenu.getMenuInflater().inflate(R.menu.nav_menu, popupMenu.getMenu());
+            popupMenu.show();
+            popupMenu.setOnMenuItemClickListener(item -> {
+                switch (item.getItemId()) {
+                    case R.id.logout:
+                        UserModel.logout();
+                        Toast.makeText(mContext, "logout", Toast.LENGTH_SHORT).show();
+                        ((Activity) mContext).finish();
+                        break;
+                }
+                return false;
+            });
+        });
+        mNavMenuFollowBtn = view.findViewById(R.id.follow_btn);
+        mNavMenuFollowBtn.setOnClickListener(v->{
+            if(mNavMenuFollowBtn.getText().equals("FOLLOW")){
+                follow();
+            }else{
+                unfollow();
+            }
+            load();
+        });
+    }
+
+
+
     public void updateInfo(User user){
         if(getView()!=null){
             State state = MainApplication.getState();
@@ -156,5 +178,59 @@ public class ProfileDetailFragment extends Fragment {
                 .placeholder(R.drawable.avatar_placeholder)
                 .error(R.drawable.avatar_placeholder)
                 .into((ImageView) mHeaderView.findViewById(R.id.profile_user_avatar));
+        updateNavMenus(user);
+    }
+
+    public void updateNavMenus(User user){
+        if(mUser.id == MainApplication.getState().userGetUid()){
+            mPopMenuBtn.setVisibility(View.VISIBLE);
+            mNavMenuFollowBtn.setVisibility(View.INVISIBLE);
+        } else {
+            if(user.followed == null){
+                mNavMenuFollowBtn.setText("FOLLOW");
+            } else {
+                mNavMenuFollowBtn.setText("UNFOLLOW");
+            }
+            mPopMenuBtn.setVisibility(View.INVISIBLE);
+            mNavMenuFollowBtn.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void follow(){
+        new Thread(()->{
+            try {
+                UserModel.follow(mUser.id);
+                getActivity().runOnUiThread(()->{
+                    mNavMenuFollowBtn.setText("UNFOLLOW");
+                });
+            } catch (ApiFailException e) {
+                if(e.getApiResult().code == 402){
+                    mNavMenuFollowBtn.setText("UNFOLLOW");
+                }
+                getActivity().runOnUiThread(()->{
+                    Toast.makeText(mContext, "Failed: " + e.getApiResult().msg, Toast.LENGTH_SHORT)
+                            .show();
+                });
+            }
+        });
+    }
+
+    public void unfollow(){
+        new Thread(()->{
+            try {
+                UserModel.follow(mUser.id);
+                getActivity().runOnUiThread(()->{
+                    mNavMenuFollowBtn.setText("FOLLOW");
+                });
+            } catch (ApiFailException e) {
+                getActivity().runOnUiThread(()->{
+                    if(e.getApiResult().code == 403){
+                        mNavMenuFollowBtn.setText("FOLLOW");
+                    }
+                    Toast.makeText(mContext, "Failed: " + e.getApiResult().msg, Toast.LENGTH_SHORT)
+                            .show();
+                });
+            }
+        });
     }
 }
