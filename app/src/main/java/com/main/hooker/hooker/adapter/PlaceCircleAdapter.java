@@ -23,8 +23,8 @@ public class PlaceCircleAdapter extends BaseQuickAdapter<PlaceCircleAdapter.Plac
         String placeText = "";
         int colorRes = 0;
         switch (item.position) {
-            case 0: placeText = "L"; colorRes = R.color.japanBlue;break;
-            case 1: placeText = "R"; colorRes = R.color.japanRed;break;
+            case 0: placeText = "L"; colorRes = R.color.japanRed;break;
+            case 1: placeText = "R"; colorRes = R.color.japanBlue;break;
             case 2: placeText = "M"; colorRes = R.color.japanGray;break;
 
         }
