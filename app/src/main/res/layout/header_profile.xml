@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="140dp"
     android:background="#EEEEEE">
@@ -111,3 +117,16 @@
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:text="My Likes"
+            android:textColor="@android:color/primary_text_light"
+            android:textSize="23sp"/>
+    </FrameLayout>
+</LinearLayout>
