@@ -12,5 +12,5 @@
     <color name="white">#fff</color>
     <color name="WayLightRed">#fff0ec</color>
     <color name="LightRed">#fc9376</color>
-    <color name="translucent_background">#F9696969</color>
+    <color name="translucent_background">#f9e7e7e7</color>
 </resources>
